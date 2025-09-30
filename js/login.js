@@ -2,6 +2,12 @@ import { displayEmployeePanel } from "./employeepanel.js";
 
 export async function displayLoginForm(){
     document.getElementById("app").innerHTML = ""
+    if (localStorage.getItem("user")){
+       await displayEmployeePanel()
+        return
+    }
+
+
 
 const loginHolder = document.createElement("div")
 
@@ -36,12 +42,16 @@ password : passwordInput.value})
 
 if(!response.ok){
     alert("forkert login")
-}
-const user = await response.json();
-localStorage.setItem("user",JSON.stringify(user))
+   await displayLoginForm()
+}else{
+    const user = await response.json();
+    localStorage.setItem("user",JSON.stringify(user))
     console.log(localStorage.getItem("user"))
-alert("bruger logget ind")
-displayEmployeePanel()
+    alert("bruger logget ind")
+   await displayEmployeePanel()
+}
+
+
 
 })
 

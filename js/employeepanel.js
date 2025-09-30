@@ -1,12 +1,14 @@
 import { displayLoginForm } from "./login.js"
+import { displayCreateNewShowForm } from "./newShowComponent.js"
 const app = document.getElementById("app")
 
 export async function displayEmployeePanel(){
+    app.innerHTML = ""
     if(!localStorage.getItem("user")){
 await displayLoginForm()
     }
     const user = JSON.parse(localStorage.getItem("user"))
-app.innerHTML = ""
+
 
 const employeePanelDiv = document.createElement("div")
 
@@ -24,7 +26,7 @@ const employeePanelDiv = document.createElement("div")
     newShowComponent.appendChild(newShowComponentHeader)
     newShowComponentHeader.addEventListener("click", await function (){
         alert("skal tilføjes til programmet")
-        //kald metoden her
+        displayCreateNewShowForm()
     })
     employeePanelComponentDiv.appendChild(newShowComponent)
 

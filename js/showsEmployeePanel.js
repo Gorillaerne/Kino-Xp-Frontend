@@ -1,34 +1,48 @@
 import {displayLoginForm} from "./login.js";
+import {displayEmployeePanel} from "./employeepanel.js";
 
 const app = document.getElementById("app")
 
-
-
 export async function displayShowEmployeePanel(){
-
-    //Tjekker først om user er logget ind
-app.innerHTML = ""
+    app.innerHTML = ""
     if (!localStorage.getItem("user")){
         await displayLoginForm()
     }
     const user = JSON.parse(localStorage.getItem("user"))
 
+    const headerButtonDiv = document.createElement("div")
+    headerButtonDiv.classList.add("header-container")
 
-    //opretter div til at holde alle components
+    const backbutton = document.createElement("img")
+    backbutton.src = "pictures/backbutton.png"
+    backbutton.classList.add("back-button");
+    backbutton.addEventListener("click", async function(){
+        await displayEmployeePanel();
+    })
+    headerButtonDiv.appendChild(backbutton)
+    app.appendChild(headerButtonDiv)
+
+
+    // Container for everything
     const componentPanel = document.createElement("div")
+    componentPanel.classList.add("employee-panel")
 
-    //første component
+    // ---- Create New Show Form ----
     const createNewShowFormDiv = document.createElement("div")
+    createNewShowFormDiv.classList.add("create-show-form")
 
     const createNewShowHeading = document.createElement("h1")
     createNewShowHeading.textContent = "Opret ny Forestilling"
+    createNewShowHeading.classList.add("form-heading")
     createNewShowFormDiv.appendChild(createNewShowHeading)
 
     const playTimeInput = document.createElement("input")
-    playTimeInput.type="datetime-local"
+    playTimeInput.type = "datetime-local"
+    playTimeInput.classList.add("form-input")
     createNewShowFormDiv.appendChild(playTimeInput)
 
     const chooseMovieInput = document.createElement("select")
+    chooseMovieInput.classList.add("form-select")
     const response = await fetch("http://localhost:8080/api/movies")
     const data = await response.json();
     if (!data){
@@ -36,37 +50,35 @@ app.innerHTML = ""
     }
 
     for (let movie of data){
-       const movieOption = document.createElement("option")
+        const movieOption = document.createElement("option")
         movieOption.textContent = movie.title
         movieOption.value = movie.id
-chooseMovieInput.appendChild(movieOption)
+        chooseMovieInput.appendChild(movieOption)
     }
     createNewShowFormDiv.appendChild(chooseMovieInput)
 
-
-
     const chooseTheaterInput = document.createElement("select")
-     const theatreResponse = await fetch("http://localhost:8080/api/users/" + user.id)
+    chooseTheaterInput.classList.add("form-select")
+    const theatreResponse = await fetch("http://localhost:8080/api/users/" + user.id)
     const theatreData = await theatreResponse.json();
     if (!theatreData){
         alert("noget gik galt med indsamlingen af sale")
     }
     for (let cinema of theatreData.cinemas){
-const cinemaName = cinema.name;
-for (let theatre of cinema.theatreList){
-    const theatreOption = document.createElement("option")
-    theatreOption.textContent = cinemaName + ": " + theatre.name
-    theatreOption.value = theatre.id
-
-    chooseTheaterInput.appendChild(theatreOption)
-}
+        const cinemaName = cinema.name;
+        for (let theatre of cinema.theatreList){
+            const theatreOption = document.createElement("option")
+            theatreOption.textContent = cinemaName + ": " + theatre.name
+            theatreOption.value = theatre.id
+            chooseTheaterInput.appendChild(theatreOption)
+        }
     }
-createNewShowFormDiv.appendChild(chooseTheaterInput)
-
+    createNewShowFormDiv.appendChild(chooseTheaterInput)
 
     const submitBtn = document.createElement("button")
     submitBtn.textContent = "Opret forestilling"
-    submitBtn.addEventListener("click",async function (){
+    submitBtn.classList.add("btn", "btn-submit")
+    submitBtn.addEventListener("click", async function (){
         const response = await fetch("http://localhost:8080/api/shows",{
             method: "POST",
             headers: {
@@ -85,20 +97,21 @@ createNewShowFormDiv.appendChild(chooseTheaterInput)
             alert("Forestilling oprettet")
             await displayShowEmployeePanel()
         }
-
-
     })
     createNewShowFormDiv.appendChild(submitBtn)
+    componentPanel.appendChild(createNewShowFormDiv)
 
-    //tilføjet første component
-componentPanel.appendChild(createNewShowFormDiv)
-
-// andede component til visningen af alle shows med delete
+    // ---- Show Display Table ----
     const showDisplayDiv = document.createElement("div");
+    showDisplayDiv.classList.add("show-display")
+
+    const showTableHeader = document.createElement("h1")
+    showTableHeader.textContent = "Kommende forstillinger"
+    showTableHeader.classList.add("form-heading")
+    showDisplayDiv.appendChild(showTableHeader)
 
     const showTable = document.createElement("table");
-    showTable.style.width = "100%";
-    showTable.border = "1";
+    showTable.classList.add("show-table")
 
     const headerRow = document.createElement("tr");
     ["Movie", "Theatre", "Show Time", "Actions"].forEach(text => {
@@ -108,9 +121,10 @@ componentPanel.appendChild(createNewShowFormDiv)
     });
     showTable.appendChild(headerRow);
 
-    // Fetch all shows
+    // Fetch shows
     const showResponse = await fetch("http://localhost:8080/api/shows");
     const showData = await showResponse.json();
+    showData.sort((a, b) => new Date(a.showTime) - new Date(b.showTime));
 
     for (let show of showData) {
         const row = document.createElement("tr");
@@ -130,13 +144,13 @@ componentPanel.appendChild(createNewShowFormDiv)
         const actionsCell = document.createElement("td");
         const removeBtn = document.createElement("button");
         removeBtn.textContent = "Fjern";
-        removeBtn.style.color = "red";
+        removeBtn.classList.add("btn", "btn-delete")
 
         removeBtn.addEventListener("click", async () => {
             const confirmed = confirm("Er du sikker på du vil slette denne forestilling?");
             if (!confirmed) return;
 
-            const delResponse = await fetch(`http://localhost:8080/api/shows/${show.id}`, {
+            const delResponse = await fetch("http://localhost:8080/api/shows/"+ show.id, {
                 method: "DELETE"
             });
 
@@ -155,21 +169,7 @@ componentPanel.appendChild(createNewShowFormDiv)
     }
 
     showDisplayDiv.appendChild(showTable);
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+    componentPanel.appendChild(showDisplayDiv)
 
     app.appendChild(componentPanel)
 }

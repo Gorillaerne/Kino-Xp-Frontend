@@ -1,5 +1,5 @@
 import { displayLoginForm } from "./login.js"
-import { displayCreateNewShowForm } from "./newShowComponent.js"
+import { displayShowEmployeePanel } from "./showsEmployeePanel.js"
 const app = document.getElementById("app")
 
 export async function displayEmployeePanel(){
@@ -26,7 +26,7 @@ const employeePanelDiv = document.createElement("div")
     newShowComponent.appendChild(newShowComponentHeader)
     newShowComponentHeader.addEventListener("click", await function (){
         alert("skal tilføjes til programmet")
-        displayCreateNewShowForm()
+        displayShowEmployeePanel()
     })
     employeePanelComponentDiv.appendChild(newShowComponent)
 

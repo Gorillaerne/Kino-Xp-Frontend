@@ -1,7 +1,7 @@
 
 import {displayUpcomingShows} from "./UpcomingShows.js";
 
-
+const app = document.getElementById("app")
 
 export function loadStylesheet(href) {
     // Remove existing page-specific stylesheet if any
@@ -59,6 +59,13 @@ export async function chooseCinemaOverlay(movieId) {
     popup.appendChild(submitBtn)
 
     overlay.appendChild(popup)
+
+
+    overlay.addEventListener("click", (e) => {
+        if (e.target === overlay) {
+            app.removeChild(overlay);
+        }
+    });
     return overlay;
 }
 

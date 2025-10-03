@@ -1,38 +1,52 @@
 
-const params = new URLSearchParams(window.location.search);
-const movieId = params.get("id") || 1;
-
-
 async function fetchMovie(id) {
     try {
         const response = await fetch(`http://localhost:8080/api/movies/${id}`);
-        if (!response.ok) {
-            throw new Error("Kunne ikke hente filmen");
-        }
+        if (!response.ok) throw new Error("Kunne ikke hente filmen");
         const movie = await response.json();
-        renderMovie(movie);
-
+        return movie; // <-- Returner data i stedet for at render
     } catch (error) {
         alert(error.message);
         console.log(error);
     }
 }
 
-    function renderMovie(movie){
-        const app = document.getElementById("app");
+function renderMovie(movie) {
+    const app = document.getElementById("app");
+    app.innerHTML = "";
 
-        app.innerHTML = `
-        <div class="movie-app">
-        <div class="movie-box">
-      <h1>${movie.title}</h1>
-      <img src="${movie.posterImage}" alt="Poster for ${movie.title}" style="max-width:200px;">
-      <p><strong>Beskrivelse:</strong> ${movie.description}</p>
-      <p><strong>Kategori:</strong> ${movie.category}</p>
-      <p><strong>Varighed:</strong> ${movie.duration}</p>
-      <p><strong>Aldersgrænse:</strong> ${movie.ageLimit}+</p>
-          </div>
-       </div>
-       `;
-    }
+    const movieApp = document.createElement("div");
+    movieApp.classList.add("movie-app");
 
-    fetchMovie(movieId);
+    const movieBox = document.createElement("div");
+    movieBox.classList.add("movie-box");
+
+    const title = document.createElement("h1");
+    title.textContent = movie.title;
+
+    const poster = document.createElement("img");
+    poster.src = movie.posterImage;
+    poster.alt = `Poster for ${movie.title}`;
+    poster.style.maxWidth = "200px";
+
+    const description = document.createElement("p");
+    description.innerHTML = `<strong>Beskrivelse:</strong> ${movie.description}`;
+
+    const category = document.createElement("p");
+    category.innerHTML = `<strong>Kategori:</strong> ${movie.category}`;
+
+    const duration = document.createElement("p");
+    duration.innerHTML = `<strong>Varighed:</strong> ${movie.duration}`;
+
+    const ageLimit = document.createElement("p");
+    ageLimit.innerHTML = `<strong>Aldersgrænse:</strong> ${movie.ageLimit}+`;
+
+    movieBox.append(title, poster, description, category, duration, ageLimit);
+    movieApp.appendChild(movieBox);
+    app.appendChild(movieApp);
+}
+
+export async function goToMoviePage(id) {
+    const movie = await fetchMovie(id);
+    if (movie) renderMovie(movie);
+}

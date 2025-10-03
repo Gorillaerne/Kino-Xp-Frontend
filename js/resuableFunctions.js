@@ -1,8 +1,4 @@
 
-
-
-
-
 export function loadStylesheet(href) {
     // Remove existing page-specific stylesheet if any
     const oldLink = document.getElementById("page-specific-style");

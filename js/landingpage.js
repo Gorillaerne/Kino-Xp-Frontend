@@ -1,10 +1,12 @@
 import {displayLoginForm} from "./login.js";
 import {loadStylesheet} from "./resuableFunctions.js";
+import {goToMoviePage} from "./moviepage.js";
+
 const app = document.getElementById("app");
 
 export async function renderPage() {
 
-    loadStylesheet("/css/landingpageStyle.css")
+    loadStylesheet("/css/landingpageStyle.css");
 
     let movies;
 
@@ -133,7 +135,7 @@ function createMoviesSection(movies) {
         const button = document.createElement("button");
         button.textContent = "Se tider";
         button.addEventListener("click", () => {
-            alert("Tilføj funktion")
+            goToMoviePage(movie.id);
         });
 
         card.append(img, title, button);

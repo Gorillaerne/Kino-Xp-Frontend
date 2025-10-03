@@ -1,6 +1,9 @@
 import { displayEmployeePanel } from "./employeepanel.js";
+import {loadStylesheet} from "./resuableFunctions.js";
+import {renderPage} from "./landingpage.js";
 
 export async function displayLoginForm() {
+   loadStylesheet("/css/styles.css")
     const app = document.getElementById("app");
     app.innerHTML = "";
 
@@ -8,9 +11,22 @@ export async function displayLoginForm() {
         await displayEmployeePanel();
         return;
     }
-
     const loginHolder = document.createElement("div");
     loginHolder.classList.add("login-card");
+
+    const headerButtonsDiv = document.createElement("div")
+    headerButtonsDiv.classList.add("header-container")
+    const backbutton = document.createElement("img")
+    backbutton.src = "pictures/backbutton.png"
+    backbutton.classList.add("back-button");
+    backbutton.addEventListener("click", async function(){
+        return await renderPage()
+    })
+    headerButtonsDiv.appendChild(backbutton)
+
+
+app.appendChild(headerButtonsDiv)
+
 
     const header = document.createElement("h1");
     header.textContent = "Medarbejder Login";

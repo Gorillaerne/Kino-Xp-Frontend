@@ -1,4 +1,8 @@
-import { displayLoginForm } from "./login.js";
+import {renderPage} from "./landingpage.js";
 
 
-await displayLoginForm()
+async function init(){
+    await renderPage();
+}
+
+init();

@@ -32,13 +32,17 @@ export async function renderPage() {
 }
 
 
-function createHeader() {
+export function createHeader() {
     const header = document.createElement("header");
     header.className = "site-header";
 
-    const logo = document.createElement("div");
+    const logo = document.createElement("img");
     logo.className = "logo";
-    logo.textContent = "KinoXP";
+    logo.src ="/pictures/logo.png"
+
+    logo.addEventListener("click", async function(){
+        return await renderPage()
+    })
 
     const nav = document.createElement("nav");
     const ul = document.createElement("ul");

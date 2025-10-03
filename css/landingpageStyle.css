@@ -124,6 +124,15 @@ body {
     margin-top: 50px;
 }
 
+.logo{
+    height: 9vh;
+    width: 9vh;
+}
+
+.logo:hover{
+    cursor: grab;
+}
+
 .overlay {
     position: fixed;
     top: 0;

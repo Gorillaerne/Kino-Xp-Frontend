@@ -1,5 +1,6 @@
 import { displayLoginForm } from "./login.js";
 import { displayShowEmployeePanel } from "./showsEmployeePanel.js";
+import { displayMovieEmployeePanel } from  "./movieEmployeePanel.js"
 
 const app = document.getElementById("app");
 
@@ -52,7 +53,7 @@ export async function displayEmployeePanel() {
     newShowComponent.classList.add("card", "component");
 
     const newShowComponentHeader = document.createElement("h1");
-    newShowComponentHeader.textContent = "Manage forestillinger";
+    newShowComponentHeader.textContent = "Håndter forestillinger";
     newShowComponentHeader.classList.add("component-header");
     newShowComponent.appendChild(newShowComponentHeader);
 
@@ -66,13 +67,12 @@ export async function displayEmployeePanel() {
     manageMovieComponent.classList.add("card", "component");
 
     const manageMovieComponentHeader = document.createElement("h1");
-    manageMovieComponentHeader.textContent = "Manage film";
+    manageMovieComponentHeader.textContent = "Håndter film";
     manageMovieComponentHeader.classList.add("component-header");
     manageMovieComponent.appendChild(manageMovieComponentHeader);
 
     manageMovieComponent.addEventListener("click", async function () {
-        alert("ikke lavet");
-        return await displayEmployeePanel();
+        return await displayMovieEmployeePanel()
     });
     employeePanelComponentDiv.appendChild(manageMovieComponent);
 

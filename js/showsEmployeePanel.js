@@ -79,6 +79,12 @@ export async function displayShowEmployeePanel(){
     submitBtn.textContent = "Opret forestilling"
     submitBtn.classList.add("btn", "btn-submit")
     submitBtn.addEventListener("click", async function (){
+
+        if (!playTimeInput.value || !chooseTheaterInput.value || !chooseMovieInput.value){
+            alert("Udfyld alle felter!")
+            return await displayShowEmployeePanel()
+        }
+
         const response = await fetch("http://localhost:8080/api/shows",{
             method: "POST",
             headers: {

@@ -1,5 +1,5 @@
 import {displayLoginForm} from "./login.js";
-import {loadStylesheet} from "./resuableFunctions.js";
+import {chooseCinemaOverlay, loadStylesheet} from "./resuableFunctions.js";
 import {goToMoviePage} from "./moviepage.js";
 
 const app = document.getElementById("app");
@@ -32,13 +32,17 @@ export async function renderPage() {
 }
 
 
-function createHeader() {
+export function createHeader() {
     const header = document.createElement("header");
     header.className = "site-header";
 
-    const logo = document.createElement("div");
+    const logo = document.createElement("img");
     logo.className = "logo";
-    logo.textContent = "KinoXP";
+    logo.src ="/pictures/logo.png"
+
+    logo.addEventListener("click", async function(){
+        return await renderPage()
+    })
 
     const nav = document.createElement("nav");
     const ul = document.createElement("ul");
@@ -91,8 +95,9 @@ function createHeroSection() {
     const button = document.createElement("button");
     button.className = "cta";
     button.textContent = "Book billet";
-    button.addEventListener("click", function (){
-        alert("Ikke lavet endnu")
+    button.addEventListener("click", async function (){
+        const overlay = await chooseCinemaOverlay()
+        app.appendChild(overlay)
     })
 
     heroText.append(h1, p, button);
@@ -134,8 +139,9 @@ function createMoviesSection(movies) {
 
         const button = document.createElement("button");
         button.textContent = "Se tider";
-        button.addEventListener("click", () => {
-            goToMoviePage(movie.id);
+        button.addEventListener("click", async () => {
+            const overlay = await chooseCinemaOverlay(movie.id)
+            app.appendChild(overlay)
         });
 
         card.append(img, title, button);

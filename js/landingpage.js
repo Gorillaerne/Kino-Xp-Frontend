@@ -1,62 +1,162 @@
+import {displayLoginForm} from "./login.js";
+import {loadStylesheet} from "./resuableFunctions.js";
+const app = document.getElementById("app");
 
+export async function renderPage() {
 
-async function fetchMovies() {
+    loadStylesheet("/css/landingpageStyle.css")
+
+    let movies;
+
     try {
         const response = await fetch("http://localhost:8080/api/movies");
-        if (!response.ok) throw new Error("Kunne ikke hente filmene");
-        const movies = await response.json();
-        renderPage(movies);
+        if (!response.ok) {
+            throw new Error("Kunne ikke hente filmene");
+        }
+        movies = await response.json();
     } catch (err) {
-        document.getElementById("app").innerHTML = `<p>${err.message}</p>`;
+        app.innerHTML = `<p>${err.message}</p>`;
+        return;
     }
+
+    // Clear app content
+    app.innerHTML = "";
+
+    // Append components
+    app.appendChild(createHeader());
+    app.appendChild(createHeroSection());
+    app.appendChild(createMoviesSection(movies));
+    app.appendChild(createFooter());
 }
 
-function renderPage(movies) {
-    const app = document.getElementById("app");
 
-    app.innerHTML = `
-    <header class="site-header">
-      <div class="logo">KinoXP</div>
-      <nav>
-        <ul>
-          <li><a href="#">Biografer</a></li>
-          <li><a href="#">Om os</a></li>
-          <li><a href="#">Login</a></li>
-        </ul>
-      </nav>
-    </header>
+function createHeader() {
+    const header = document.createElement("header");
+    header.className = "site-header";
 
-    <section class="hero">
-      <div class="hero-text">
-        <h1>En biograf oplevelse du aldrig glemmer</h1>
-        <p>Kom i KinoXP og bliv forkælet</p>
-        <button class="cta">Book billet</button>
-      </div>
-      <div class="hero-img">
-        <img src="/pictures/bio.png" alt="Biograf sal">
-      </div>
-    </section>
+    const logo = document.createElement("div");
+    logo.className = "logo";
+    logo.textContent = "KinoXP";
 
-    <section class="movies">
-      <h2>Film</h2>
-      <div class="movie-grid">
-        ${movies.map(movie => `
-          <div class="movie-card">
-            <img src="${movie.posterImage}" alt="Poster for ${movie.title}">
-            <h3>${movie.title}</h3>
-            <button onclick="window.location.href='movie.html?id=${movie.id}'">
-              Se tider
-            </button>
-          </div>
-        `).join("")}
-      </div>
-    </section>
+    const nav = document.createElement("nav");
+    const ul = document.createElement("ul");
 
-    <footer class="site-footer">
-      <div class="footer-logo">KinoXP</div>
-      <p>Vi ejer selvfølgelig rettighederne til alle vores film</p>
-    </footer>
-  `;
+    // Helper to create nav item
+    function createNavItem(text, href = "#", onClick = null) {
+        const li = document.createElement("li");
+        const a = document.createElement("a");
+        a.href = href;
+        a.textContent = text;
+        if (onClick) {
+            a.addEventListener("click", onClick);
+        }
+        li.appendChild(a);
+        return li;
+    }
+
+    ul.appendChild(createNavItem("Biografer"));
+    ul.appendChild(createNavItem("Om os"));
+
+    // Login nav item with a click handler
+    const loginNavItem = createNavItem("Login", "#", async (e) => {
+        e.preventDefault();
+        // Call your imported displayLoginForm here
+        await displayLoginForm();
+    });
+
+    ul.appendChild(loginNavItem);
+
+    nav.appendChild(ul);
+    header.appendChild(logo);
+    header.appendChild(nav);
+
+    return header;
 }
 
-fetchMovies();
+function createHeroSection() {
+    const section = document.createElement("section");
+    section.className = "hero";
+
+    const heroText = document.createElement("div");
+    heroText.className = "hero-text";
+
+    const h1 = document.createElement("h1");
+    h1.textContent = "En biograf oplevelse du aldrig glemmer";
+
+    const p = document.createElement("p");
+    p.textContent = "Kom i KinoXP og bliv forkælet";
+
+    const button = document.createElement("button");
+    button.className = "cta";
+    button.textContent = "Book billet";
+    button.addEventListener("click", function (){
+        alert("Ikke lavet endnu")
+    })
+
+    heroText.append(h1, p, button);
+
+    const heroImg = document.createElement("div");
+    heroImg.className = "hero-img";
+
+    const img = document.createElement("img");
+    img.src = "/pictures/bio.png";
+    img.alt = "Biograf sal";
+
+    heroImg.appendChild(img);
+
+    section.append(heroText, heroImg);
+
+    return section;
+}
+
+function createMoviesSection(movies) {
+    const section = document.createElement("section");
+    section.className = "movies";
+
+    const h2 = document.createElement("h2");
+    h2.textContent = "Film";
+
+    const grid = document.createElement("div");
+    grid.className = "movie-grid";
+
+    movies.forEach(movie => {
+        const card = document.createElement("div");
+        card.className = "movie-card";
+
+        const img = document.createElement("img");
+        img.src = movie.posterImage;
+        img.alt = `Poster for ${movie.title}`;
+
+        const title = document.createElement("h3");
+        title.textContent = movie.title;
+
+        const button = document.createElement("button");
+        button.textContent = "Se tider";
+        button.addEventListener("click", () => {
+            alert("Tilføj funktion")
+        });
+
+        card.append(img, title, button);
+        grid.appendChild(card);
+    });
+
+    section.append(h2, grid);
+    return section;
+}
+
+function createFooter() {
+    const footer = document.createElement("footer");
+    footer.className = "site-footer";
+
+    const logo = document.createElement("div");
+    logo.className = "footer-logo";
+    logo.textContent = "KinoXP";
+
+    const p = document.createElement("p");
+    p.textContent = "Vi ejer selvfølgelig rettighederne til alle vores film";
+
+    footer.append(logo, p);
+    return footer;
+}
+
+

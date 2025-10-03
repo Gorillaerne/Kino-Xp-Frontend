@@ -1,6 +1,7 @@
 import { displayLoginForm } from "./login.js";
 import { displayShowEmployeePanel } from "./showsEmployeePanel.js";
 import { displayMovieEmployeePanel } from  "./movieEmployeePanel.js"
+import {renderPage} from "./landingpage.js";
 
 const app = document.getElementById("app");
 
@@ -16,7 +17,7 @@ export async function displayEmployeePanel() {
     backbutton.src = "pictures/backbutton.png"
     backbutton.classList.add("back-button");
     backbutton.addEventListener("click", async function(){
-        alert("skal opdateres til hjemmesideforsiden!!")
+       return await renderPage()
     })
     headerButtonsDiv.appendChild(backbutton)
 
@@ -58,7 +59,7 @@ export async function displayEmployeePanel() {
     newShowComponent.appendChild(newShowComponentHeader);
 
     newShowComponent.addEventListener("click", async function () {
-        await displayShowEmployeePanel();
+        return await displayShowEmployeePanel();
     });
     employeePanelComponentDiv.appendChild(newShowComponent);
 

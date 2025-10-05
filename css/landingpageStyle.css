@@ -223,3 +223,10 @@ width: 15em;
 .upcomingshows-headingdiv h1{
     text-align: center;
 }
+
+.upcoming-movie{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-evenly;
+}

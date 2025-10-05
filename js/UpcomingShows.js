@@ -66,115 +66,110 @@ export async function displayUpcomingShows(movieId, cinemaId) {
 async function updateUpcomingMovies(cinemaId, movieId, containerDiv) {
     containerDiv.innerHTML = ""; // Clear old data
 
+    // If no specific movie selected → show all active movies
     if (!movieId) {
-        // Show all active movies
         const response = await fetch(`http://localhost:8080/api/movies/active/${cinemaId}`);
         const movieData = await response.json();
 
         for (let movie of movieData) {
-            const singularUpcomingMovieDiv = document.createElement("div");
-            singularUpcomingMovieDiv.classList.add("upcoming-movie");
-
-            const movieSection = document.createElement("div");
-            movieSection.classList.add("movie-section");
-
-            const moviePoster = document.createElement("img");
-            moviePoster.src = movie.posterImage;
-            moviePoster.alt = movie.title;
-
-            const movieName = document.createElement("h2");
-            movieName.textContent = movie.title;
-
-            movieSection.appendChild(moviePoster);
-            movieSection.appendChild(movieName);
-            singularUpcomingMovieDiv.appendChild(movieSection);
-
-            // 🎞️ Table showing 7 days
-            const dateTable = document.createElement("table");
-            dateTable.classList.add("date-table");
-
-            const headerRow = document.createElement("tr");
-            const showtimeRow = document.createElement("tr");
-
-            const today = new Date();
-
-            for (let i = 0; i < 7; i++) {
-                const futureDate = new Date(today);
-                futureDate.setDate(today.getDate() + i);
-
-                // Format as "Mon 6 Oct"
-                const options = { weekday: "short", day: "numeric", month: "short" };
-                const formattedDate = futureDate.toLocaleDateString("da-DK", options);
-
-                // Date cell
-                const dateCell = document.createElement("th");
-                dateCell.textContent = formattedDate;
-                dateCell.classList.add("date-cell");
-                headerRow.appendChild(dateCell);
-
-                // 🎟️ Cell for multiple showtimes
-                const showtimeCell = document.createElement("td");
-                showtimeCell.classList.add("showtime-cell");
-
-                // Fetch shows for this movie/date (if you have an endpoint like this)
-                const dateStr = futureDate.toISOString().split("T")[0]; // e.g. 2025-10-05
-                try {
-                    const showResponse = await fetch(`http://localhost:8080/api/shows/` + cinemaId + "/"+ movie.id +  "/"+dateStr);
-                    if (showResponse.ok) {
-                        const showData = await showResponse.json();
-
-                        if (showData.length > 0) {
-                            for (let show of showData) {
-                                const showBtn = document.createElement("button");
-                                showBtn.textContent = show.showTime; // e.g. "19:30"
-                                showBtn.classList.add("showtime-btn");
-
-                                showBtn.addEventListener("click", () => {
-                                    alert("Tilføj dette")
-                                });
-
-                                showtimeCell.appendChild(showBtn);
-                            }
-                        } else {
-                            showtimeCell.textContent = "Ingen forestillinger";
-                            showtimeCell.classList.add("no-showtime");
-                        }
-                    } else {
-                        showtimeCell.textContent = "Fejl";
-                    }
-                } catch (err) {
-                    showtimeCell.textContent = "Fejl ved hentning";
-                }
-
-                showtimeRow.appendChild(showtimeCell);
-            }
-
-            dateTable.appendChild(headerRow);
-            dateTable.appendChild(showtimeRow);
-            singularUpcomingMovieDiv.appendChild(dateTable);
-            containerDiv.appendChild(singularUpcomingMovieDiv);
+            await renderMovieShows(cinemaId, movie, containerDiv);
         }
-    } else {
-        // Show screenings for specific movie (future expansion)
-        const response = await fetch("http://localhost:8080/api/movies/" + movieId);
-        const movieData = await response.json();
-        const singularUpcomingMovieDiv = document.createElement("div");
-        singularUpcomingMovieDiv.classList.add("upcoming-movie");
-
-        const movieSection = document.createElement("div");
-        movieSection.classList.add("movie-section");
-
-        const moviePoster = document.createElement("img");
-        moviePoster.src = movieData.posterImage;
-        moviePoster.alt = movieData.title;
-
-        const movieName = document.createElement("h2");
-        movieName.textContent = movieData.title;
-
-        movieSection.appendChild(moviePoster);
-        movieSection.appendChild(movieName);
-        singularUpcomingMovieDiv.appendChild(movieSection);
-
-        containerDiv.appendChild(singularUpcomingMovieDiv);
     }
+    // Otherwise, show only the selected movie
+    else {
+        const response = await fetch(`http://localhost:8080/api/movies/${movieId}`);
+        const movieData = await response.json();
+        await renderMovieShows(cinemaId, movieData, containerDiv);
+    }
+}
+
+// Helper function to render 7 days of shows for one movie
+async function renderMovieShows(cinemaId, movie, containerDiv) {
+    const singularUpcomingMovieDiv = document.createElement("div");
+    singularUpcomingMovieDiv.classList.add("upcoming-movie");
+
+    // 🎬 Movie section
+    const movieSection = document.createElement("div");
+    movieSection.classList.add("movie-section");
+
+    const moviePoster = document.createElement("img");
+    moviePoster.src = movie.posterImage;
+    moviePoster.alt = movie.title;
+
+    const movieName = document.createElement("h2");
+    movieName.textContent = movie.title;
+
+    movieSection.appendChild(moviePoster);
+    movieSection.appendChild(movieName);
+    singularUpcomingMovieDiv.appendChild(movieSection);
+
+    // 🎞️ Table showing 7 days
+    const dateTable = document.createElement("table");
+    dateTable.classList.add("date-table");
+
+    const headerRow = document.createElement("tr");
+    const showtimeRow = document.createElement("tr");
+
+    const today = new Date();
+
+    for (let i = 0; i < 7; i++) {
+        const futureDate = new Date(today);
+        futureDate.setDate(today.getDate() + i);
+
+        const options = { weekday: "short", day: "numeric", month: "short" };
+        const formattedDate = futureDate.toLocaleDateString("da-DK", options);
+
+        // Date header cell
+        const dateCell = document.createElement("th");
+        dateCell.textContent = formattedDate;
+        dateCell.classList.add("date-cell");
+        headerRow.appendChild(dateCell);
+
+        // Showtime cell
+        const showtimeCell = document.createElement("td");
+        showtimeCell.classList.add("showtime-cell");
+
+        // Fetch shows for this date
+        const dateStr = futureDate.toISOString().split("T")[0];
+        try {
+            const showResponse = await fetch(`http://localhost:8080/api/shows/${cinemaId}/${movie.id}/${dateStr}`);
+            if (showResponse.ok) {
+                const showData = await showResponse.json();
+
+                if (showData.length > 0) {
+                    for (let show of showData) {
+                        console.log(show)
+                        const showBtn = document.createElement("div");
+                        const showHeading = document.createElement("h3")
+                        showHeading.textContent = "Kl. " +show.showTime.split("T")[1]?.substring(0, 5) || show.showTime;
+
+                        showBtn.textContent = show.theatre.name // e.g. "19:30"
+                        showBtn.classList.add("showtime-btn");
+                        showBtn.appendChild(showHeading)
+
+                        showBtn.addEventListener("click", () => {
+                            alert(`Du valgte ${movie.title} kl. ${show.showTime}`);
+                            // Or navigate to booking page: displayShowDetails(show.id)
+                        });
+
+                        showtimeCell.appendChild(showBtn);
+                    }
+                } else {
+                    showtimeCell.textContent = "Ingen forestillinger";
+                    showtimeCell.classList.add("no-showtime");
+                }
+            } else {
+                showtimeCell.textContent = "Fejl";
+            }
+        } catch (err) {
+            showtimeCell.textContent = "Fejl ved hentning";
+        }
+
+        showtimeRow.appendChild(showtimeCell);
+    }
+
+    dateTable.appendChild(headerRow);
+    dateTable.appendChild(showtimeRow);
+    singularUpcomingMovieDiv.appendChild(dateTable);
+    containerDiv.appendChild(singularUpcomingMovieDiv);
 }

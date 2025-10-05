@@ -19,8 +19,16 @@ export function loadStylesheet(href) {
 
 
 export async function chooseCinemaOverlay(movieId) {
-    const response = await fetch("http://localhost:8080/api/cinemas")
-    const data = await response.json()
+    let data;
+
+    if (movieId){
+        const response = await fetch("http://localhost:8080/api/cinemas/displaying/" + movieId)
+        data = await response.json()
+    }else {
+        const response = await fetch("http://localhost:8080/api/cinemas")
+        data = await response.json()
+    }
+
 
     // Overlay background
     const overlay = document.createElement("div")

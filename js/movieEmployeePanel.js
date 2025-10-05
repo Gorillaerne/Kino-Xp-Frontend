@@ -132,7 +132,7 @@ export async function displayMovieEmployeePanel(){
     submitBtn.classList.add("btn", "btn-submit")
     submitBtn.addEventListener("click", async function () {
 
-        if (!titleInput.value || !durationInput.value ||descriptionInput.value || posterInput.files.length > 0 || categorySelect.value ||ageLimitInput.value){
+        if (!titleInput.value || !durationInput.value || !descriptionInput.value || !posterInput.files.length > 0 || !categorySelect.value ||!ageLimitInput.value){
             alert("Udfyld alle felter")
 return  await displayMovieEmployeePanel()
         }

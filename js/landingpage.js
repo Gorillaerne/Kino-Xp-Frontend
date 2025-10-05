@@ -11,7 +11,7 @@ export async function renderPage() {
     let movies;
 
     try {
-        const response = await fetch("http://localhost:8080/api/movies");
+        const response = await fetch("http://localhost:8080/api/movies/active");
         if (!response.ok) {
             throw new Error("Kunne ikke hente filmene");
         }

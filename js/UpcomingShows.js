@@ -1,29 +1,27 @@
 import {createHeader} from "./landingpage.js";
 
-
 const app = document.getElementById("app")
+
+
+
 export async function displayUpcomingShows(movieId, cinemaId){
     app.innerHTML = "";
 
     const cinemaResponse = await fetch("http://localhost:8080/api/cinemas/" + cinemaId)
     const cinemaData = await cinemaResponse.json();
 
-
-
-
-
 app.appendChild(createHeader())
 
     const headingDiv = document.createElement("div")
     const heading = document.createElement("h1")
+    headingDiv.classList.add("upcomingshows-headingdiv")
     heading.textContent="Kommende forestillinger i " + cinemaData.name
     headingDiv.appendChild(heading)
     app.appendChild(headingDiv)
 
 
     const filterDiv = document.createElement("div")
-
-
+    filterDiv.classList.add("filter-div")
     const activeMovieResponse = await fetch("http://localhost:8080/api/movies/active/"+cinemaData.id)
     const activeMovieData = await activeMovieResponse.json();
 
@@ -67,6 +65,8 @@ movieFilterSelect.appendChild(standardOption)
     app.appendChild(filterDiv)
 
 
+
+    const movieTimesDiv = document.createElement("div")
 
 
 

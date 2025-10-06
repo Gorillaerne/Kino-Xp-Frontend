@@ -183,14 +183,54 @@ const movieDescriptionDiv = document.createElement("div")
     showDescriptionDiv.appendChild(showTimePeriod)
 
 
-
-
     movieShowDescription.appendChild(showDescriptionDiv)
-
-
     showInfoDiv.appendChild(movieShowDescription)
 
 
+    const chosenTicketDiv = document.createElement("div")
+    chosenTicketDiv.classList.add("reservation-description-container")
+
+    // Title
+    const chosenTicketTitleDiv = document.createElement("div")
+
+    const chosenTicketTitle = document.createElement("h2")
+    chosenTicketTitle.textContent = "Valgte billetter:"
+
+    chosenTicketTitleDiv.appendChild(chosenTicketTitle)
+    chosenTicketDiv.appendChild(chosenTicketTitleDiv)
+
+
+
+    // Showing what tickets have been selected
+    const selectedTicketDiv = document.createElement("div")
+
+    chosenTicketDiv.appendChild(selectedTicketDiv)
+
+
+
+    // Ticket price
+    const reservationPriceDiv = document.createElement("div")
+    const reservationPriceText = document.createElement("h2")
+    reservationPriceText.textContent = "Pris: " + 0 + " kr."
+
+    reservationPriceDiv.appendChild(reservationPriceText)
+
+
+    chosenTicketDiv.appendChild(reservationPriceDiv)
+
+
+
+    // Buy tickets button
+    const reservationButtonDiv = document.createElement("div")
+    const reservationButton = document.createElement("button")
+    reservationButton.classList.add("reservation-bnt")
+    reservationButton.textContent = "Køb Billetter"
+    reservationButton.addEventListener("click", function (){
+        alert("Du har købt!")
+    })
+
+    reservationButtonDiv.appendChild(reservationButton)
+    chosenTicketDiv.appendChild(reservationButtonDiv)
 
 
 
@@ -203,6 +243,8 @@ const movieDescriptionDiv = document.createElement("div")
 
 
 
+
+    showInfoDiv.appendChild(chosenTicketDiv)
 
     displaySeatReservationDiv.appendChild(showInfoDiv)
 

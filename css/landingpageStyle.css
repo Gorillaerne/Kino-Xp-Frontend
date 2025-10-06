@@ -463,3 +463,26 @@ width: 15em;
 .show-info-container{
     margin: 50px;
 }
+
+.reservation-description-container {
+    margin: 40px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    border-style: solid;
+    border-width: 2px;
+    border-color: #00b7ff;
+    border-radius: 1em;
+    box-shadow: 0 0px 9px rgb(0, 195, 255);
+}
+
+.reservation-bnt {
+    background-color: #007BFF;
+    color: #fff;
+    border: none;
+    padding: 12px 24px;
+    border-radius: 6px;
+    cursor: pointer;
+}
+

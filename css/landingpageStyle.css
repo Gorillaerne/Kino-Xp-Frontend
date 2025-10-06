@@ -388,14 +388,18 @@ width: 15em;
 }
 
 .seat-row{
-    margin: 25px;
+    margin: 12px;
     display: flex;
     flex-direction: row;
     align-items: center;
     justify-content: center;
 }
 .seat{
-    margin: 3px;
+    margin: 2px;
+
+}
+.seat img{
+    width:2em;
 
 }
 .seat:hover{
@@ -417,7 +421,7 @@ width: 15em;
     display: flex;
     flex-direction: row;
     justify-content: center;
-    align-items: center;
+    align-items: flex-start;
 }
 .seats-description-container{
     display: flex;
@@ -436,6 +440,7 @@ width: 15em;
     margin: 4px;
 }
 .movie-show-description-container{
+    width: 100%;
     display: flex;
     flex-direction: row;
     justify-content: center;
@@ -445,8 +450,6 @@ width: 15em;
     border-color: #00b7ff;
     border-radius: 1em;
     box-shadow: 0 0px 9px rgb(0, 195, 255);
-
-
 }
 .movie-show-description-container > * {
     margin: 20px;
@@ -462,10 +465,14 @@ width: 15em;
 }
 .show-info-container{
     margin: 50px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
 }
 
 .reservation-description-container {
-    margin: 40px;
+    margin-top: 25px;
+width: 100%;
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -476,6 +483,13 @@ width: 15em;
     border-radius: 1em;
     box-shadow: 0 0px 9px rgb(0, 195, 255);
 }
+.reservation-description-container > *{
+    margin: 20px;
+}
+.reservation-description-container div button{
+
+}
+
 
 .reservation-bnt {
     background-color: #007BFF;
@@ -484,5 +498,13 @@ width: 15em;
     padding: 12px 24px;
     border-radius: 6px;
     cursor: pointer;
+}
+.line-item{
+    display: flex;
+    flex-direction: column;
+}
+
+.line-item a{
+   margin: 4px
 }
 

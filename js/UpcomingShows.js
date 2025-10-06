@@ -1,4 +1,5 @@
 import { createHeader } from "./landingpage.js";
+import {displaySeatReservation} from "./SeatReservation.js";
 
 const app = document.getElementById("app");
 
@@ -99,8 +100,13 @@ async function renderMovieShows(cinemaId, movie, containerDiv) {
     const movieName = document.createElement("h2");
     movieName.textContent = movie.title;
 
+    const movieDescription = document.createElement("a")
+    movieDescription.textContent = "Varighed: " + movie.duration.substring(1, 5).split(":")[0] + " T " +movie.duration.substring(1, 5).split(":")[1] + " Min" + " - Aldersgrænse:  " +movie.ageLimit + " år.";
+
+
     movieSection.appendChild(moviePoster);
     movieSection.appendChild(movieName);
+    movieSection.appendChild(movieDescription)
     singularUpcomingMovieDiv.appendChild(movieSection);
 
     // 🎞️ Table showing 7 days
@@ -135,6 +141,7 @@ async function renderMovieShows(cinemaId, movie, containerDiv) {
             const showResponse = await fetch(`http://localhost:8080/api/shows/${cinemaId}/${movie.id}/${dateStr}`);
             if (showResponse.ok) {
                 const showData = await showResponse.json();
+                showData.sort((a, b) => new Date(a.showTime) - new Date(b.showTime));
 
                 if (showData.length > 0) {
                     for (let show of showData) {
@@ -147,9 +154,8 @@ async function renderMovieShows(cinemaId, movie, containerDiv) {
                         showBtn.classList.add("showtime-btn");
                         showBtn.appendChild(showHeading)
 
-                        showBtn.addEventListener("click", () => {
-                            alert(`Du valgte ${movie.title} kl. ${show.showTime}`);
-                            // Or navigate to booking page: displayShowDetails(show.id)
+                        showBtn.addEventListener("click", async function() {
+                            return await displaySeatReservation(show.id);
                         });
 
                         showtimeCell.appendChild(showBtn);

@@ -2,7 +2,7 @@
 
 async function fetchMovie(id) {
     try {
-        const response = await fetch(window.config.API_BASE_URL +`/api/movies/${id}`);
+        const response = await fetch(`${window.config.API_BASE_URL}` +`/api/movies/${id}`);
         if (!response.ok) throw new Error("Kunne ikke hente filmen");
         const movie = await response.json();
         return movie; // <-- Returner data i stedet for at render

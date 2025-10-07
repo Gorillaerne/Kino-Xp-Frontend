@@ -37,5 +37,20 @@ jobs:
             docker.io/${{ secrets.DOCKER_USERNAME }}/kino-frontend:latest
             docker.io/${{ secrets.DOCKER_USERNAME }}/kino-frontend:${{ github.run_number }}
 
+      - name: 🚀 Deploy to server
+        uses: appleboy/ssh-action@v0.1.8
+        with:
+          host: ${{ secrets.SERVER_IP }}
+          username: ${{ secrets.SERVER_USER }}
+          key: ${{ secrets.SERVER_SSH_KEY }}
+          port: 22
+          script: |
+            cd /kino
+            docker-compose down
+            docker-compose pull
+            docker-compose up -d
+
+
       - name: ✅ Deployment complete
-        run: echo "🎉 Successfully pushed Frontend Docker image to Docker Hub!"
+        run: echo "🎉 Successfully pushed Frontend Docker image to Docker Hub! and deployed on server"
+        

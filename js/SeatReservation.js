@@ -67,7 +67,7 @@ seatReservationComponentDiv.appendChild(seatReservationComponentHeaderDiv)
             seatDiv.classList.add("seat");
 
             const seatImg = document.createElement("img");
-            seatImg.src = "/pictures/Seat.svg";
+            seatImg.src = "/pictures/seat.svg";
 
             const clickHandler = () => handleSeatClick(seat, seatImg,selectedTicketDiv, reservationPriceText);
 
@@ -76,7 +76,7 @@ seatReservationComponentDiv.appendChild(seatReservationComponentHeaderDiv)
             // Mark booked seats
             for (let bookedSeat of bookedSeatsData) {
                 if (bookedSeat.seat.id === seat.id) {
-                    seatImg.src = "/pictures/SeatBooked.svg";
+                    seatImg.src = "/pictures/seatBooked.svg";
                     seatDiv.removeEventListener("click", clickHandler);
                     seatDiv.style.cursor = "not-allowed";
                     break;
@@ -109,7 +109,7 @@ seatReservationComponentDiv.appendChild(seatReservationComponentHeaderDiv)
     const bookedImageDiv = document.createElement("div");
     bookedImageDiv.classList.add("seats-description")
     const bookedImage = document.createElement("img");
-    bookedImage.src = "/pictures/SeatBooked.svg";
+    bookedImage.src = "/pictures/seatBooked.svg";
     bookedImageDiv.appendChild(bookedImage);
     const bookedImageText = document.createElement("h3");
     bookedImageText.textContent = "Udsolgt";
@@ -120,7 +120,7 @@ seatReservationComponentDiv.appendChild(seatReservationComponentHeaderDiv)
     const freeImageDiv = document.createElement("div");
     freeImageDiv.classList.add("seats-description")
     const freeImage = document.createElement("img");
-    freeImage.src = "/pictures/Seat.svg";
+    freeImage.src = "/pictures/seat.svg";
     freeImageDiv.appendChild(freeImage);
     const freeImageText = document.createElement("h3");
     freeImageText.textContent = "Ledig";
@@ -131,7 +131,7 @@ seatReservationComponentDiv.appendChild(seatReservationComponentHeaderDiv)
     const yourImageDiv = document.createElement("div");
     yourImageDiv.classList.add("seats-description")
     const yourImage = document.createElement("img");
-    yourImage.src = "/pictures/SeatSelected.svg";
+    yourImage.src = "/pictures/seatSelected.svg";
     yourImageDiv.appendChild(yourImage);
     const yourImageText = document.createElement("h3");
     yourImageText.textContent = "Din plads";
@@ -265,7 +265,7 @@ function handleSeatClick(seat, seatImg, selectedTicketDiv, reservationPriceText)
 
     if (isSelected) {
         // Deselect seat
-        seatImg.src = "/pictures/Seat.svg";
+        seatImg.src = "/pictures/seat.svg";
         seatImg.dataset.selected = "false";
 
         // Remove seat from array
@@ -279,7 +279,7 @@ function handleSeatClick(seat, seatImg, selectedTicketDiv, reservationPriceText)
         totalPrice -= 150;
     } else {
         // Select seat
-        seatImg.src = "/pictures/SeatSelected.svg";
+        seatImg.src = "/pictures/seatSelected.svg";
         seatImg.dataset.selected = "true";
 
         // Add seat to array

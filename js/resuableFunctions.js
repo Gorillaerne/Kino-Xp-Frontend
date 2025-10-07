@@ -1,5 +1,6 @@
 
 import {displayUpcomingShows} from "./UpcomingShows.js";
+import {API_BASE_URL} from "./config.js";
 
 const app = document.getElementById("app")
 
@@ -22,10 +23,10 @@ export async function chooseCinemaOverlay(movieId) {
     let data;
 
     if (movieId){
-        const response = await fetch("http://localhost:8080/api/cinemas/displaying/" + movieId)
+        const response = await fetch(API_BASE_URL +"/api/cinemas/displaying/" + movieId)
         data = await response.json()
     }else {
-        const response = await fetch("http://localhost:8080/api/cinemas")
+        const response = await fetch(API_BASE_URL +"/api/cinemas")
         data = await response.json()
     }
 

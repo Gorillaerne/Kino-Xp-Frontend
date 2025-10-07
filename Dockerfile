@@ -6,7 +6,6 @@ WORKDIR /usr/share/nginx/html
 COPY . .
 
 # Allow overriding backend URL via build arg
-ARG API_URL=http://localhost:8080
 RUN echo "export const API_BASE_URL = '${API_URL}';" > ./config.js
 
 EXPOSE 80

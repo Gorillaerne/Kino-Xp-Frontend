@@ -7,6 +7,9 @@ COPY . .
 
 
 # Allow overriding backend URL via build arg
+
+ARG API_URL
+
 RUN echo "export const API_BASE_URL = '${API_URL}';" > ./config.js
 
 EXPOSE 80

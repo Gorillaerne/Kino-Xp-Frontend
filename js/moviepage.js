@@ -1,7 +1,8 @@
+import {API_BASE_URL} from "./config.js";
 
 async function fetchMovie(id) {
     try {
-        const response = await fetch(`http://localhost:8080/api/movies/${id}`);
+        const response = await fetch(API_BASE_URL +`/api/movies/${id}`);
         if (!response.ok) throw new Error("Kunne ikke hente filmen");
         const movie = await response.json();
         return movie; // <-- Returner data i stedet for at render

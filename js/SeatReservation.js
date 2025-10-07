@@ -2,7 +2,12 @@ import {createHeader} from "./landingpage.js";
 
 
 const app = document.getElementById("app")
+let selectedSeats = [];
+let totalPrice = 0;
+
 export async function displaySeatReservation(showId){
+   selectedSeats = [];
+    totalPrice = 0;
 app.innerHTML = "";
 const header = createHeader();
 app.appendChild(header)
@@ -56,34 +61,33 @@ seatReservationComponentDiv.appendChild(seatReservationComponentHeaderDiv)
     for (let seatList of seatMap.values()){
         const seatRow = document.createElement("div")
         seatRow.classList.add("seat-row");
-        for (let seat of seatList){
-            const seatDiv = document.createElement("div")
-            seatDiv.classList.add("seat")
-            const seatImg = document.createElement("img")
-            seatImg.src = "/pictures/Seat.svg"
-            seatDiv.appendChild(seatImg)
-            const clickHandler = () => handleSeatClick(seat);
+        for (let seat of seatList) {
+            const seatDiv = document.createElement("div");
+            seatDiv.classList.add("seat");
 
-            seatDiv.addEventListener("click",clickHandler)
+            const seatImg = document.createElement("img");
+            seatImg.src = "/pictures/Seat.svg";
 
-            for (let bookedSeat of bookedSeatsData){
-                if (bookedSeat.seat.id === seat.id){
-                    seatImg.src = "/pictures/SeatBooked.svg"
-                    seatDiv.removeEventListener("click",clickHandler)
-                    seatDiv.style.cursor = "not-allowed"; // show seat as unclickable
-                    break
+            const clickHandler = () => handleSeatClick(seat, seatImg,selectedTicketDiv, reservationPriceText);
+
+            seatDiv.addEventListener("click", clickHandler);
+
+            // Mark booked seats
+            for (let bookedSeat of bookedSeatsData) {
+                if (bookedSeat.seat.id === seat.id) {
+                    seatImg.src = "/pictures/SeatBooked.svg";
+                    seatDiv.removeEventListener("click", clickHandler);
+                    seatDiv.style.cursor = "not-allowed";
+                    break;
                 }
-
             }
 
-
-
-
-
-            seatRow.appendChild(seatDiv)
+            seatDiv.appendChild(seatImg);
+            seatRow.appendChild(seatDiv);
         }
 
-seatReservationDiv.appendChild(seatRow)
+
+        seatReservationDiv.appendChild(seatRow)
     }
 
 
@@ -203,6 +207,7 @@ const movieDescriptionDiv = document.createElement("div")
 
     // Showing what tickets have been selected
     const selectedTicketDiv = document.createElement("div")
+    selectedTicketDiv.classList.add("line-item")
 
     chosenTicketDiv.appendChild(selectedTicketDiv)
 
@@ -211,7 +216,7 @@ const movieDescriptionDiv = document.createElement("div")
     // Ticket price
     const reservationPriceDiv = document.createElement("div")
     const reservationPriceText = document.createElement("h2")
-    reservationPriceText.textContent = "Pris: " + 0 + " kr."
+    reservationPriceText.textContent = "Pris: " + totalPrice + " kr."
 
     reservationPriceDiv.appendChild(reservationPriceText)
 
@@ -224,9 +229,11 @@ const movieDescriptionDiv = document.createElement("div")
     const reservationButtonDiv = document.createElement("div")
     const reservationButton = document.createElement("button")
     reservationButton.classList.add("reservation-bnt")
-    reservationButton.textContent = "Køb Billetter"
-    reservationButton.addEventListener("click", function (){
-        alert("Du har købt!")
+    reservationButton.textContent = "Book biletter"
+    reservationButton.addEventListener("click", async function (){
+        if (selectedSeats.length<1){
+            alert("du har ikke valgt nogle sæder")
+        }
     })
 
     reservationButtonDiv.appendChild(reservationButton)
@@ -252,7 +259,43 @@ const movieDescriptionDiv = document.createElement("div")
 }
 
 
-function handleSeatClick(seat) {
-    alert("du har klippet på " + seat.id)
-    // handle booking logic here
+function handleSeatClick(seat, seatImg, selectedTicketDiv, reservationPriceText) {
+    const isSelected = seatImg.dataset.selected === "true";
+
+    if (isSelected) {
+        // Deselect seat
+        seatImg.src = "/pictures/Seat.svg";
+        seatImg.dataset.selected = "false";
+
+        // Remove seat from array
+        selectedSeats = selectedSeats.filter(s => s.id !== seat.id);
+
+        // Remove seat line from selectedTicketDiv
+        const seatLine = document.getElementById(`seat-${seat.id}`);
+        if (seatLine) seatLine.remove();
+
+        // Decrease price
+        totalPrice -= 150;
+    } else {
+        // Select seat
+        seatImg.src = "/pictures/SeatSelected.svg";
+        seatImg.dataset.selected = "true";
+
+        // Add seat to array
+        selectedSeats.push(seat);
+
+        // Add seat line to selectedTicketDiv
+        const seatLine = document.createElement("a");
+        seatLine.id = `seat-${seat.id}`; // unique ID
+        seatLine.textContent = `Sæde ${seat.seatNumber}. Række ${seat.row} - 150 kr.`;
+        selectedTicketDiv.appendChild(seatLine);
+
+        // Increase price
+        totalPrice += 150;
+    }
+
+    // Update price display
+    reservationPriceText.textContent = "Pris: " + totalPrice + " kr.";
+
+    console.log("Selected seats:", selectedSeats);
 }

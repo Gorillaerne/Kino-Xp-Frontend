@@ -1,7 +1,9 @@
 import { displayLoginForm } from "./login.js";
 import { displayShowEmployeePanel } from "./showsEmployeePanel.js";
-import { displayMovieEmployeePanel } from  "./movieEmployeePanel.js"
+import { displayMovieEmployeePanel } from  "./movieEmployeePanel.js";
+import { displayManageEmployee } from "./manageemployee.js";
 import {renderPage} from "./landingpage.js";
+
 
 const app = document.getElementById("app");
 
@@ -11,6 +13,7 @@ export async function displayEmployeePanel() {
     if (!localStorage.getItem("user")) {
        return await displayLoginForm();
     }
+    const user = JSON.parse(localStorage.getItem("user"));
     const headerButtonsDiv = document.createElement("div")
     headerButtonsDiv.classList.add("header-container")
     const backbutton = document.createElement("img")
@@ -36,8 +39,7 @@ export async function displayEmployeePanel() {
 
     app.appendChild(headerButtonsDiv)
 
-    const user = JSON.parse(localStorage.getItem("user"));
-
+    
     const employeePanelDiv = document.createElement("div");
     employeePanelDiv.classList.add("card", "employee-panel");
 
@@ -76,6 +78,23 @@ export async function displayEmployeePanel() {
         return await displayMovieEmployeePanel()
     });
     employeePanelComponentDiv.appendChild(manageMovieComponent);
+
+    // Manage employees (Admin Only)
+    if(user.authlevel == "ADMIN"){
+        const manageEmployeeComponent = document.createElement("div");
+        manageEmployeeComponent.classList.add("card", "component");
+
+        const manageEmployeeComponentHeader = document.createElement("h1");
+        manageEmployeeComponentHeader.textContent = "Håndter Medarbejdere";
+        manageEmployeeComponentHeader.classList.add("component-header");
+        manageEmployeeComponent.appendChild(manageEmployeeComponentHeader);
+        console.log("blabla");
+
+        manageEmployeeComponent.addEventListener("click", async function(){
+            return await displayManageEmployee()
+        });
+        employeePanelComponentDiv.appendChild(manageEmployeeComponent);
+    }
 
     // Append components
     employeePanelDiv.appendChild(employeePanelComponentDiv);

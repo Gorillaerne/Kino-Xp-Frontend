@@ -88,7 +88,6 @@ export async function displayEmployeePanel() {
         manageEmployeeComponentHeader.textContent = "Håndter Medarbejdere";
         manageEmployeeComponentHeader.classList.add("component-header");
         manageEmployeeComponent.appendChild(manageEmployeeComponentHeader);
-        console.log("blabla");
 
         manageEmployeeComponent.addEventListener("click", async function(){
             return await displayManageEmployee()

@@ -1,6 +1,7 @@
 import {displayLoginForm} from "./login.js";
 import {chooseCinemaOverlay, loadStylesheet} from "./resuableFunctions.js";
 import {goToMoviePage} from "./moviepage.js";
+import {API_BASE_URL} from "./config.js";
 
 const app = document.getElementById("app");
 
@@ -11,7 +12,7 @@ export async function renderPage() {
     let movies;
 
     try {
-        const response = await fetch("http://localhost:8080/api/movies/active");
+        const response = await fetch(API_BASE_URL + "/api/movies/active");
         if (!response.ok) {
             throw new Error("Kunne ikke hente filmene");
         }

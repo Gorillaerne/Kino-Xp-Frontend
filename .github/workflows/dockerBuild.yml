@@ -51,8 +51,8 @@ jobs:
           port: 22
           script: |
             cd /kino
-            docker-compose pull
-            docker-compose up -d
+            docker compose pull
+            docker compose up -d
 
       - name: ✅ Deployment complete
         run: echo "🎉 Successfully deployed Frontend to server!"

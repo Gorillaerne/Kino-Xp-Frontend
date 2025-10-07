@@ -50,7 +50,7 @@ jobs:
           key: ${{ secrets.SERVER_SSH_KEY }}
           port: 22
           script: |
-            cd /kino
+            cd kino
             docker compose pull
             docker compose up -d
 

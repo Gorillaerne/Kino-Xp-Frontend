@@ -31,6 +31,8 @@ jobs:
           context: .
           file: ./Dockerfile
           push: true
+          build-args: |
+            API_URL=http:backend:8080
           tags: |
             docker.io/${{ secrets.DOCKER_USERNAME }}/kino-frontend:latest
             docker.io/${{ secrets.DOCKER_USERNAME }}/kino-frontend:${{ github.run_number }}

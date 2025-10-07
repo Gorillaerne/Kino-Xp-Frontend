@@ -99,7 +99,7 @@ export async function displayManageEmployee() {
     cinemaSelect.classList.add("form-select")
 
 // ---- Fetch cinemas from backend ----
-    const cinemaResponse = await fetch(API_BASE_URL + "/api/cinemas")
+    const cinemaResponse = await fetch(`${window.config.API_BASE_URL}` + "/api/cinemas")
     const cinemaData = await cinemaResponse.json();
     if (!Array.isArray(cinemaData) || cinemaData.length === 0) {
     alert("Ingen biografer fundet");
@@ -126,7 +126,7 @@ export async function displayManageEmployee() {
 
         const cinemaIds = [parseInt(cinemaSelect.value)];
 
-        const response = await fetch(API_BASE_URL + "/api/users", {
+        const response = await fetch(`${window.config.API_BASE_URL}`+ "/api/users",{
             method: "POST",
             headers: {
                 "Content-Type": "application/json"
@@ -170,7 +170,7 @@ export async function displayManageEmployee() {
     employeeTable.appendChild(headerRow);
 
     //Fetch Employees
-    const employeeResponse = await fetch(API_BASE_URL + "/api/users");
+    const employeeResponse = await fetch(`${window.config.API_BASE_URL}` + "/api/users");
     if (!employeeResponse.ok) {
         alert("Kunne ikke indlæse medarbejdere");
         return;
@@ -214,7 +214,7 @@ export async function displayManageEmployee() {
             const confirmed = confirm("Er du sikker på du vil slette denne medarbejder?");
             if (!confirmed) return;
 
-            const delResponse = await fetch(API_BASE_URL + "/api/users/" + emp.id, {
+            const delResponse = await fetch(`${window.config.API_BASE_URL}` + "/api/users" + emp.id, {
                 method: "DELETE"
             });
 

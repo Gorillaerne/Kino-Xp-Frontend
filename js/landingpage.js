@@ -37,7 +37,7 @@ export function createHeader() {
 
     const logo = document.createElement("img");
     logo.className = "logo";
-    logo.src ="/pictures/logo.png"
+    logo.src ="/pictures/Logo.png"
 
     logo.addEventListener("click", async function(){
         return await renderPage()

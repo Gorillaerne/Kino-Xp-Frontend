@@ -5,9 +5,11 @@ WORKDIR /usr/share/nginx/html
 # Copy frontend build files
 COPY . .
 
-# Allow overriding backend URL via build arg
-RUN echo "export const API_BASE_URL = '${API_URL}';" > ./config.js
+# Copy entrypoint script
+COPY docker-entrypoint.sh /docker-entrypoint.sh
+RUN chmod +x /docker-entrypoint.sh
 
 EXPOSE 80
 
+ENTRYPOINT ["/docker-entrypoint.sh"]
 CMD ["nginx", "-g", "daemon off;"]

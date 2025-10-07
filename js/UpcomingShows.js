@@ -1,6 +1,5 @@
 import { createHeader } from "./landingpage.js";
 import {displaySeatReservation} from "./SeatReservation.js";
-import {API_BASE_URL} from "./config.js";
 
 const app = document.getElementById("app");
 
@@ -11,7 +10,7 @@ export async function displayUpcomingShows(movieId, cinemaId) {
     const upcomingShowsHolderDiv = document.createElement("div");
 
     // Fetch cinema info
-    const cinemaResponse = await fetch(API_BASE_URL +`/api/cinemas/${cinemaId}`);
+    const cinemaResponse = await fetch(window.config.API_BASE_URL +`/api/cinemas/${cinemaId}`);
     const cinemaData = await cinemaResponse.json();
 
     // Header
@@ -28,7 +27,7 @@ export async function displayUpcomingShows(movieId, cinemaId) {
     const filterDiv = document.createElement("div");
     filterDiv.classList.add("filter-div");
 
-    const activeMovieResponse = await fetch(API_BASE_URL +`/api/movies/active/${cinemaData.id}`);
+    const activeMovieResponse = await fetch(window.config.API_BASE_URL+`/api/movies/active/${cinemaData.id}`);
     const activeMovieData = await activeMovieResponse.json();
 
     const movieFilterSelect = document.createElement("select");
@@ -70,7 +69,7 @@ async function updateUpcomingMovies(cinemaId, movieId, containerDiv) {
 
     // If no specific movie selected → show all active movies
     if (!movieId) {
-        const response = await fetch(API_BASE_URL +`/api/movies/active/${cinemaId}`);
+        const response = await fetch(window.config.API_BASE_URL +`/api/movies/active/${cinemaId}`);
         const movieData = await response.json();
 
         for (let movie of movieData) {
@@ -79,7 +78,7 @@ async function updateUpcomingMovies(cinemaId, movieId, containerDiv) {
     }
     // Otherwise, show only the selected movie
     else {
-        const response = await fetch(API_BASE_URL +`/api/movies/${movieId}`);
+        const response = await fetch(window.config.API_BASE_URL +`/api/movies/${movieId}`);
         const movieData = await response.json();
         await renderMovieShows(cinemaId, movieData, containerDiv);
     }
@@ -139,7 +138,7 @@ async function renderMovieShows(cinemaId, movie, containerDiv) {
         // Fetch shows for this date
         const dateStr = futureDate.toISOString().split("T")[0];
         try {
-            const showResponse = await fetch(API_BASE_URL +`/api/shows/${cinemaId}/${movie.id}/${dateStr}`);
+            const showResponse = await fetch(window.config.API_BASE_URL +`/api/shows/${cinemaId}/${movie.id}/${dateStr}`);
             if (showResponse.ok) {
                 const showData = await showResponse.json();
                 showData.sort((a, b) => new Date(a.showTime) - new Date(b.showTime));

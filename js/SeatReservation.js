@@ -1,5 +1,5 @@
 import {createHeader} from "./landingpage.js";
-import {API_BASE_URL} from "./config.js";
+
 
 
 const app = document.getElementById("app")
@@ -34,7 +34,7 @@ seatReservationComponentDiv.appendChild(seatReservationComponentHeaderDiv)
 
     const seatReservationDiv = document.createElement("div")
 
-    const response = await fetch(API_BASE_URL +"/api/shows/" + showId)
+    const response = await fetch(window.config.API_BASE_URL+"/api/shows/" + showId)
     if (!response.ok){
         alert("showet kunne ikke findes")
     }
@@ -52,7 +52,7 @@ seatReservationComponentDiv.appendChild(seatReservationComponentHeaderDiv)
     console.log(seatMap)
 
     //henter alle de bookede sæder til denne forestilling
-    const bookedSeatsResponse = await fetch(API_BASE_URL +"/api/bookedseats/" + showId)
+    const bookedSeatsResponse = await fetch(window.config.API_BASE_URL +"/api/bookedseats/" + showId)
     if (!bookedSeatsResponse.ok){
         alert("noget gik galt med inlæsning af bookede sæder")
     }

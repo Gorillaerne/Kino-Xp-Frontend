@@ -1,6 +1,6 @@
 import {displayLoginForm} from "./login.js";
 import {displayEmployeePanel} from "./employeepanel.js";
-import {API_BASE_URL} from "./config.js";
+
 
 const app = document.getElementById("app")
 
@@ -44,7 +44,7 @@ export async function displayShowEmployeePanel(){
 
     const chooseMovieInput = document.createElement("select")
     chooseMovieInput.classList.add("form-select")
-    const response = await fetch(API_BASE_URL +"/api/movies")
+    const response = await fetch(window.config.API_BASE_URL +"/api/movies")
     const data = await response.json();
     if (!data){
         alert("noget gik galt med indsamlingen af film")
@@ -60,7 +60,7 @@ export async function displayShowEmployeePanel(){
 
     const chooseTheaterInput = document.createElement("select")
     chooseTheaterInput.classList.add("form-select")
-    const theatreResponse = await fetch(API_BASE_URL + "api/users/" + user.id)
+    const theatreResponse = await fetch(window.config.API_BASE_URL + "api/users/" + user.id)
     const theatreData = await theatreResponse.json();
     if (!theatreData){
         alert("noget gik galt med indsamlingen af sale")
@@ -86,7 +86,7 @@ export async function displayShowEmployeePanel(){
             return await displayShowEmployeePanel()
         }
 
-        const response = await fetch(API_BASE_URL +"/api/shows",{
+        const response = await fetch(window.config.API_BASE_URL +"/api/shows",{
             method: "POST",
             headers: {
                 "Content-Type": "application/json"
@@ -129,7 +129,7 @@ export async function displayShowEmployeePanel(){
     showTable.appendChild(headerRow);
 
     // Fetch shows
-    const showResponse = await fetch(API_BASE_URL +"/api/shows");
+    const showResponse = await fetch(window.config.API_BASE_URL +"/api/shows");
     const showData = await showResponse.json();
     showData.sort((a, b) => new Date(a.showTime) - new Date(b.showTime));
 
@@ -157,7 +157,7 @@ export async function displayShowEmployeePanel(){
             const confirmed = confirm("Er du sikker på du vil slette denne forestilling?");
             if (!confirmed) return;
 
-            const delResponse = await fetch(API_BASE_URL +"/api/shows/"+ show.id, {
+            const delResponse = await fetch(window.config.API_BASE_URL +"/api/shows/"+ show.id, {
                 method: "DELETE"
             });
 

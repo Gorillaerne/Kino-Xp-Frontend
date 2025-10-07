@@ -2,8 +2,8 @@ name: Deploy Frontend to Docker Hub
 
 on:
   push:
-    branches: [ "master" ]    # Deploy automatically when pushing to master
-  workflow_dispatch:          # Allow manual runs
+    branches: [ "master" ]
+  workflow_dispatch:
 
 jobs:
   build-and-push:
@@ -31,9 +31,28 @@ jobs:
           context: .
           file: ./Dockerfile
           push: true
+          build-args: |
+            API_URL=http://backend:8080
           tags: |
             docker.io/${{ secrets.DOCKER_USERNAME }}/kino-frontend:latest
             docker.io/${{ secrets.DOCKER_USERNAME }}/kino-frontend:${{ github.run_number }}
 
+  deploy:
+    runs-on: ubuntu-latest
+    needs: build-and-push   # ✅ Only runs if build-and-push succeeds
+
+    steps:
+      - name: 🚀 Deploy to server
+        uses: appleboy/ssh-action@v0.1.8
+        with:
+          host: ${{ secrets.SERVER_IP }}
+          username: ${{ secrets.SERVER_USER }}
+          key: ${{ secrets.SERVER_SSH_KEY }}
+          port: 22
+          script: |
+            cd kino
+            docker compose pull
+            docker compose up -d
+
       - name: ✅ Deployment complete
-        run: echo "🎉 Successfully pushed Frontend Docker image to Docker Hub!"
+        run: echo "🎉 Successfully deployed Frontend to server!"

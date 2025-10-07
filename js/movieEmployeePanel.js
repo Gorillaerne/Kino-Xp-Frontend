@@ -1,6 +1,6 @@
 import {displayLoginForm} from "./login.js";
 import {displayEmployeePanel} from "./employeepanel.js";
-import {API_BASE_URL} from "./config.js";
+
 
 const app = document.getElementById("app")
 
@@ -101,7 +101,7 @@ export async function displayMovieEmployeePanel(){
     categorySelect.classList.add("form-select")
 
 // Fetch categories from backend (enums)
-    const categoryResponse = await fetch(API_BASE_URL +"/api/movies/categories")
+    const categoryResponse = await fetch(window.config.API_BASE_URL +"/api/movies/categories")
     const categoryData = await categoryResponse.json();
     if (!categoryData){
         alert("Noget gik galt med indsamlingen af kategorier")
@@ -143,7 +143,7 @@ return  await displayMovieEmployeePanel()
             posterBase64 = await toBase64(posterInput.files[0]);
         }
 
-        const response = await fetch(API_BASE_URL +"/api/movies",{
+        const response = await fetch(window.config.API_BASE_URL +"/api/movies",{
             method: "POST",
             headers: {
                 "Content-Type": "application/json"
@@ -192,7 +192,7 @@ return  await displayMovieEmployeePanel()
     movieTable.appendChild(headerRow);
 
 // Fetch movies
-    const movieResponse = await fetch(API_BASE_URL +"/api/movies");
+    const movieResponse = await fetch(window.config.API_BASE_URL +"/api/movies");
     const movieData = await movieResponse.json();
 
     for (let movie of movieData) {
@@ -248,7 +248,7 @@ return  await displayMovieEmployeePanel()
             const confirmed = confirm("Er du sikker på du vil slette denne film?");
             if (!confirmed) return;
 
-            const delResponse = await fetch(API_BASE_URL +"/api/movies/" + movie.id, {
+            const delResponse = await fetch(window.config.API_BASE_URL +"/api/movies/" + movie.id, {
                 method: "DELETE"
             });
 

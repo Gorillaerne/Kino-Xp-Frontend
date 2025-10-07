@@ -2,10 +2,14 @@ FROM nginx:alpine
 
 WORKDIR /usr/share/nginx/html
 
+# Copy build output
+COPY . .
 
-# Allow overriding backend URL via build arg
-RUN echo "export const API_BASE_URL = '${API_URL}';" > ./config.js
+# Copy nginx config and entrypoint
+COPY nginx/default.conf /etc/nginx/conf.d/default.conf
+COPY docker-entrypoint.sh /docker-entrypoint.sh
+RUN chmod +x /docker-entrypoint.sh
 
 EXPOSE 80
-
+ENTRYPOINT ["/docker-entrypoint.sh"]
 CMD ["nginx", "-g", "daemon off;"]

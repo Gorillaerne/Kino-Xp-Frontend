@@ -1,7 +1,7 @@
 import { displayEmployeePanel } from "./employeepanel.js";
 import {loadStylesheet} from "./resuableFunctions.js";
 import {renderPage} from "./landingpage.js";
-import {API_BASE_URL} from "./config.js";
+
 
 export async function displayLoginForm() {
    loadStylesheet("/css/styles.css")
@@ -48,7 +48,7 @@ app.appendChild(headerButtonsDiv)
     submitBtn.classList.add("login-button");
 
     submitBtn.addEventListener("click", async function () {
-        const response = await fetch(API_BASE_URL +"/api/users/login", {
+        const response = await fetch(window.config.API_BASE_URL +"/api/users/login", {
             method: "POST",
             headers: {
                 "Content-Type": "application/json"

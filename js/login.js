@@ -48,7 +48,7 @@ app.appendChild(headerButtonsDiv)
     submitBtn.classList.add("login-button");
 
     submitBtn.addEventListener("click", async function () {
-        const response = await fetch(window.config.API_BASE_URL +"/api/users/login", {
+        const response = await fetch(`${window.config.API_BASE_URL}` +"/api/users/login", {
             method: "POST",
             headers: {
                 "Content-Type": "application/json"

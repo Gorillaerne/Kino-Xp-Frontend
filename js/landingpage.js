@@ -10,7 +10,7 @@ export async function renderPage() {
     let movies;
 
     try {
-        const response = await fetch(`${window.config.API_BASE_URL}/api/movies/active`)
+        const response = await fetch(`${window.config.API_BASE_URL}` + "/api/movies/active")
         if (!response.ok) {
             throw new Error("Kunne ikke hente filmene");
         }

@@ -350,3 +350,34 @@ it looks even worse now /* General Panel Layout */ .employee-panel {
     border: 1px solid #ccc;
     box-sizing: border-box;
 }
+
+.create-employee-form {
+    max-width: 500px; /* Limit width */
+    width: 90%;        /* Responsive width */
+    margin: 0 auto;    /* Center horizontally */
+    padding: 20px;
+    background-color: #f9f9f9;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+}
+
+.create-employee-form label {
+    display: block;
+    margin-top: 15px;
+    font-weight: bold;
+}
+
+.employee-display {
+    padding: 20px;
+    width: 100%;
+    font-family: Arial, sans-serif;
+    background: #f9f9f9;
+    border-radius: 10px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    margin: 20px auto;
+    max-width: none; /* Increase max width */
+    overflow-y: auto; /* allow vertical scrolling */
+    overflow-x: hidden; /* no horizontal scrolling */; /* allow horizontal scroll on smaller screens */
+    max-height: 80vh; /* limit height so scroll appears */
+    box-sizing: border-box;
+}

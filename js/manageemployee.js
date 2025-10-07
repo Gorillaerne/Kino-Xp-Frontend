@@ -1,6 +1,5 @@
 import {displayLoginForm} from "./login.js";
 import {displayEmployeePanel} from "./employeepanel.js";
-import { API_BASE_URL } from "./config.js";
 
 const app = document.getElementById("app")
 

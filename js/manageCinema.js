@@ -23,8 +23,8 @@ export async function displayManageCinema(){
     headerButtonDiv.appendChild(backbutton)
     app.appendChild(headerButtonDiv)
 
-    //Create new Cinema Form
 
+    //Create new Cinema Form
     const createNewCinemaFormDiv = document.createElement("div");
     createNewCinemaFormDiv.classList.add("create-cinema-form");
 
@@ -44,9 +44,10 @@ export async function displayManageCinema(){
     createNewCinemaFormDiv.appendChild(nameLabel);
     createNewCinemaFormDiv.appendChild(nameInput);
 
+    //Knappen til at oprette cinema
     const submitButton = document.createElement("button");
     submitButton.textContent = "Opret biograf";
-    submitButton.classList.add("submitButton");
+    submitButton.classList.add("btn-submit");
 
     submitButton.addEventListener("click", async (event) =>{
         event.preventDefault();
@@ -55,6 +56,20 @@ export async function displayManageCinema(){
         if(!cinemaName){
             alert("Du skal indtaste et navn på biografen");
             return displayManageCinema();
+        }
+
+        //Hent eksisterende biografer så den kan tjekke om du opretter nogle med samme navn
+        const responseGet = await fetch(`${window.config.API_BASE_URL}/api/cinemas`);
+        const cinemas = await responseGet.json();
+
+        const cinemaExists = cinemas.some(
+            (cinema) => cinema.name.toLowerCase() === cinemaName.toLowerCase()
+        );
+
+        if (cinemaExists) {
+            alert("Der findes allerede en biograf med det navn!");
+            nameInput.value = "";
+            return;
         }
 
         const response = await fetch(`${window.config.API_BASE_URL}` + "/api/cinemas/name",{
@@ -69,6 +84,7 @@ export async function displayManageCinema(){
             alert("Biografen blev oprettet");
             nameInput.value = "";
             await loadCinemasList();
+
         } else {
             alert("Noget gik galt under oprettelsen");
         }
@@ -79,7 +95,7 @@ export async function displayManageCinema(){
     createNewCinemaFormDiv.appendChild(submitButton);
     app.appendChild(createNewCinemaFormDiv);
 
-    //Show list of current cinemas and it's theatres
+    //Show list of current cinemas
     const cinemaListDiv = document.createElement("div");
     cinemaListDiv.classList.add("cinema-list");
     app.appendChild(cinemaListDiv);

@@ -360,6 +360,21 @@ const movieDescriptionDiv = document.createElement("div")
         }
     })
 
+    async function closePopup() {
+        form.reset();                 // nulstil input felter
+        return await displaySeatReservation(showId)
+    }
+
+    // Annuller-knap
+    formBntCancel.addEventListener("click", closePopup);
+
+    // Klik uden for popup
+    bookPopupOverlay.addEventListener("click", function(event) {
+        if (event.target === bookPopupOverlay) {
+            closePopup();
+        }
+    });
+
 }
 
 

@@ -3,8 +3,6 @@ import { displayEmployeePanel } from "./employeepanel.js";
 
 const app = document.getElementById("app");
 
-
-
 export async function displayManageCinema() {
     app.innerHTML = "";
     if (!localStorage.getItem("user")) {
@@ -26,11 +24,11 @@ export async function displayManageCinema() {
     headerButtonDiv.appendChild(backbutton);
     app.appendChild(headerButtonDiv);
 
-    // ---- Container for everything ----
+    // Container til det hele
     const componentPanel = document.createElement("div");
     componentPanel.classList.add("employee-panel");
 
-    // ---- Create New Cinema Form ----
+    // Div til formen
     const createNewCinemaFormDiv = document.createElement("div");
     createNewCinemaFormDiv.classList.add("create-movie-form"); // reuse movie form styling
 
@@ -58,7 +56,7 @@ export async function displayManageCinema() {
 
     componentPanel.appendChild(createNewCinemaFormDiv);
 
-    // ---- Cinema Table Display ----
+    // Biograf visning
     const cinemaDisplayDiv = document.createElement("div");
     cinemaDisplayDiv.classList.add("movie-display"); // genbruger styling
 
@@ -131,7 +129,7 @@ export async function displayManageCinema() {
 
     await loadCinemasList();
 
-    // ---- Form submit ----
+    // Submit knap til at oprette biograf
     submitButton.addEventListener("click", async (event) => {
         event.preventDefault();
 

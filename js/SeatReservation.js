@@ -301,7 +301,7 @@ const movieDescriptionDiv = document.createElement("div")
     form.appendChild(formBntContainer)
 
     bookPopupOverlay.appendChild(popupContainer)
-    document.body.appendChild(bookPopupOverlay)
+    app.appendChild(bookPopupOverlay)
 
     // Buy tickets button
     const reservationButtonDiv = document.createElement("div")
@@ -345,15 +345,15 @@ const movieDescriptionDiv = document.createElement("div")
             console.log(JSON.stringify(reservationData, null, 2));
             if (!response.ok) {
                 const errorText = await response.text();
-                console.error("Booking failed:", errorText);
-                alert("Noget gik galt. Prøv igen.");
-                return;
+                alert(errorText)
+                return await displaySeatReservation(showId)
+
             }
             alert("Din booking er gennemført!");
             bookPopupOverlay.style.display = "none";
             selectedSeats = [];
             totalPrice = 0;
-            displaySeatReservation(showData.id);
+            return await displaySeatReservation(showData.id);
         } catch (error) {
             console.error("Fejl ved booking:", error);
             alert("Serverfejl under booking.");

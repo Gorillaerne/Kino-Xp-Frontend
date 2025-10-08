@@ -337,7 +337,7 @@ const movieDescriptionDiv = document.createElement("div")
             seatIds: selectedSeats.map(seat => seat.id)
         }
         try {
-            const response = await fetch(API_BASE_URL + "/api/reservations", {
+            const response = await fetch(`${window.config.API_BASE_URL}`+ "/api/reservations", {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify(reservationData)

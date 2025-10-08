@@ -15,7 +15,7 @@ export async function displayEmployeePanel() {
     }
     const user = JSON.parse(localStorage.getItem("user"));
     const headerButtonsDiv = document.createElement("div")
-    headerButtonsDiv.classList.add("header-container")
+    headerButtonsDiv.classList.add("header-container");
     const backbutton = document.createElement("img")
     backbutton.src = "pictures/backbutton.png"
     backbutton.classList.add("back-button");
@@ -74,6 +74,7 @@ export async function displayEmployeePanel() {
     manageMovieComponentHeader.classList.add("component-header");
     manageMovieComponent.appendChild(manageMovieComponentHeader);
 
+
     manageMovieComponent.addEventListener("click", async function () {
         return await displayMovieEmployeePanel()
     });
@@ -95,7 +96,30 @@ export async function displayEmployeePanel() {
         employeePanelComponentDiv.appendChild(manageEmployeeComponent);
     }
 
+    // Manage Cinema (Admin only)
+    if(user.authlevel == "ADMIN"){
+        const manageCinemaComponent = document.createElement("div");
+        manageCinemaComponent.classList.add("card", "component");
+
+        const manageCinemaComponentHeader = document.createElement("h1");
+        manageCinemaComponentHeader.textContent = "Håndter biografer";
+        manageCinemaComponentHeader.classList.add("component-header");
+        manageCinemaComponent.appendChild(manageCinemaComponentHeader);
+
+        manageCinemaComponent.addEventListener("click", async function(){
+            return await displayManageCinema
+        });
+
+        employeePanelComponentDiv.appendChild(manageCinemaComponent);
+
+    }
+
+
     // Append components
     employeePanelDiv.appendChild(employeePanelComponentDiv);
     app.appendChild(employeePanelDiv);
 }
+
+
+
+

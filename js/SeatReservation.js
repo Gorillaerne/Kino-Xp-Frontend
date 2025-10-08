@@ -226,37 +226,140 @@ const movieDescriptionDiv = document.createElement("div")
 
 
 
-    // Buy tickets button
-    const reservationButtonDiv = document.createElement("div")
-    const reservationButton = document.createElement("button")
-    reservationButton.classList.add("reservation-bnt")
-    reservationButton.textContent = "Book biletter"
-    reservationButton.addEventListener("click", async function (){
-        if (selectedSeats.length<1){
-            alert("du har ikke valgt nogle sæder")
-        }
-    })
-
-    reservationButtonDiv.appendChild(reservationButton)
-    chosenTicketDiv.appendChild(reservationButtonDiv)
-
-
-
-
-
-
-
-
 
 
 
 
 
     showInfoDiv.appendChild(chosenTicketDiv)
-
     displaySeatReservationDiv.appendChild(showInfoDiv)
-
     app.appendChild(displaySeatReservationDiv)
+
+
+    // Popup container (skjult som standard)
+    const bookPopupOverlay = document.createElement("div")
+    bookPopupOverlay.classList.add("book-popup-overlay")
+    bookPopupOverlay.style.display = "none"
+
+
+    // Popup vindue
+    const popupContainer = document.createElement("div")
+    popupContainer.classList.add("popup-container")
+
+    const popupTitleDiv = document.createElement("div")
+    const popupTitle = document.createElement("h2")
+    popupTitle.textContent = "Bekræft din booking"
+
+    popupTitleDiv.appendChild(popupTitle) // title til title div
+    popupContainer.appendChild(popupTitleDiv) // title div til container
+
+    const formDiv = document.createElement("div")
+    const form = document.createElement("form")
+
+    // Array over fields i popup
+    const fields = [
+        { label: "Navn", id: "name", type: "text" },
+        { label: "Email", id: "email", type: "email" },
+        { label: "Telefon nr:", id: "phoneNumber", type: "tel"},
+    ];
+
+    // Laver til forEach for hvert felt i form
+    fields.forEach(f => {
+        const label = document.createElement("label")
+        label.textContent = f.label
+        label.setAttribute("for", f.id)
+
+        const input = document.createElement("input")
+        input.type = f.type
+        input.id = f.id
+        input.required = true;
+
+        form.appendChild(label)
+        form.appendChild(input)
+    })
+
+    formDiv.appendChild(form);
+    popupContainer.appendChild(formDiv)
+
+    // Form buttons
+    const formBntContainer = document.createElement("div")
+    formBntContainer.classList.add("form-popup-bnt")
+
+    const formBntConfirm = document.createElement("button")
+    formBntConfirm.textContent = "Bekræft"
+    formBntConfirm.classList.add("form-confirm-bnt")
+    formBntConfirm.type = "submit"
+
+    const formBntCancel = document.createElement("button")
+    formBntCancel.textContent = "Annuller"
+    formBntCancel.classList.add("form-Cancel-bnt")
+    formBntCancel.type = "button"
+
+    formBntContainer.appendChild(formBntConfirm)
+    formBntContainer.appendChild(formBntCancel)
+    popupContainer.appendChild(formBntContainer)
+    form.appendChild(formBntContainer)
+
+    bookPopupOverlay.appendChild(popupContainer)
+    document.body.appendChild(bookPopupOverlay)
+
+    // Buy tickets button
+    const reservationButtonDiv = document.createElement("div")
+    const reservationButton = document.createElement("button")
+    reservationButton.classList.add("reservation-bnt")
+    reservationButton.textContent = "Book biletter"
+    reservationButton.addEventListener("click", async function (){
+        console.log("Selected seats length:", selectedSeats.length);
+        if (selectedSeats.length < 1){
+            alert("du har ikke valgt nogle sæder")
+            return
+        }
+        bookPopupOverlay.style.display = "flex";
+    })
+
+    reservationButtonDiv.appendChild(reservationButton)
+    chosenTicketDiv.appendChild(reservationButtonDiv)
+
+
+    // Submit button
+    form.addEventListener("submit", async function(e) {
+        e.preventDefault()
+
+        const name = document.getElementById("name").value.trim();
+        const email = document.getElementById("email").value.trim();
+        const phoneNumber = document.getElementById("phoneNumber").value.trim();
+
+        const reservationData = {
+            name: name,
+            email: email,
+            phoneNumber: parseInt(phoneNumber),
+            showId: showData.id,
+            seatIds: selectedSeats.map(seat => seat.id)
+        }
+        try {
+            const response = await fetch(API_BASE_URL + "/api/reservations", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify(reservationData)
+            })
+            console.log(JSON.stringify(reservationData, null, 2));
+            if (!response.ok) {
+                const errorText = await response.text();
+                console.error("Booking failed:", errorText);
+                alert("Noget gik galt. Prøv igen.");
+                return;
+            }
+            alert("Din booking er gennemført!");
+            bookPopupOverlay.style.display = "none";
+            selectedSeats = [];
+            totalPrice = 0;
+            displaySeatReservation(showData.id);
+        } catch (error) {
+            console.error("Fejl ved booking:", error);
+            alert("Serverfejl under booking.");
+        }
+    })
+
 }
 
 
@@ -300,3 +403,4 @@ function handleSeatClick(seat, seatImg, selectedTicketDiv, reservationPriceText)
 
     console.log("Selected seats:", selectedSeats);
 }
+

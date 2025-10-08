@@ -3,6 +3,7 @@ import { displayShowEmployeePanel } from "./showsEmployeePanel.js";
 import { displayMovieEmployeePanel } from  "./movieEmployeePanel.js";
 import { displayManageEmployee } from "./manageemployee.js";
 import {renderPage} from "./landingpage.js";
+import {displayManageCinema} from "./manageCinema.js";
 
 
 const app = document.getElementById("app");
@@ -97,7 +98,7 @@ export async function displayEmployeePanel() {
     }
 
     // Manage Cinema (Admin only)
-    if(user.authlevel == "ADMIN"){
+    if(user.authlevel === "ADMIN"){
         const manageCinemaComponent = document.createElement("div");
         manageCinemaComponent.classList.add("card", "component");
 
@@ -107,7 +108,7 @@ export async function displayEmployeePanel() {
         manageCinemaComponent.appendChild(manageCinemaComponentHeader);
 
         manageCinemaComponent.addEventListener("click", async function(){
-            return await displayManageCinema
+            return await displayManageCinema();
         });
 
         employeePanelComponentDiv.appendChild(manageCinemaComponent);

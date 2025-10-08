@@ -360,6 +360,21 @@ const movieDescriptionDiv = document.createElement("div")
         }
     })
 
+    function closePopup() {
+        form.reset();                 // nulstil input felter
+        bookPopupOverlay.style.display = "none"; // skjul popup
+    }
+
+    // Annuller-knap
+    formBntCancel.addEventListener("click", closePopup);
+
+    // Klik uden for popup
+    bookPopupOverlay.addEventListener("click", function(event) {
+        if (event.target === bookPopupOverlay) {
+            closePopup();
+        }
+    });
+
 }
 
 

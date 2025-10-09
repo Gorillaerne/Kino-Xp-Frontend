@@ -7,7 +7,7 @@ const app = document.getElementById("app")
 let selectedSeats = [];
 let totalPrice = 0;
 
-export async function displaySeatReservation(showId,cinemaId,movieId){
+export async function displaySeatReservation(showId,cinemaId){
    selectedSeats = [];
     totalPrice = 0;
 app.innerHTML = "";
@@ -21,12 +21,7 @@ app.appendChild(header)
     backbutton.src = "pictures/backbutton.png"
     backbutton.classList.add("back-button");
     backbutton.addEventListener("click", async function(){
-        if (movieId!=null){
-            return await displayUpcomingShows(movieId,cinemaId)
-        }else {
             return await displayUpcomingShows(null,cinemaId)
-        }
-
     })
 
     backbuttonDiv.appendChild(backbutton)

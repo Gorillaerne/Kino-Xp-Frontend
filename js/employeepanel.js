@@ -4,6 +4,7 @@ import { displayMovieEmployeePanel } from  "./movieEmployeePanel.js";
 import { displayManageEmployee } from "./manageemployee.js";
 import {renderPage} from "./landingpage.js";
 import {displayManageCinema} from "./manageCinema.js";
+import {displayManageTheatre} from "./manageTheatre.js";
 
 
 const app = document.getElementById("app");

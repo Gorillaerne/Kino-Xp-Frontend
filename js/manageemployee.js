@@ -90,17 +90,43 @@ export async function displayManageEmployee() {
 
 // ---- Cinema Select ----
     const cinemaLabel = document.createElement("label")
-    cinemaLabel.textContent = "Tilhørende Biograf"
+    cinemaLabel.textContent = "Tilhørende Biograf(er)"
     cinemaLabel.setAttribute("for", "cinemaSelect")
     createNewEmployeeFormDiv.appendChild(cinemaLabel)
 
-    const cinemaSelect = document.createElement("select")
+    const cinemaContainer = document.createElement("div")
+    cinemaContainer.id = "cinemaContainer"
+    cinemaContainer.classList.add("cinema-container") // add CSS for styling
+    createNewEmployeeFormDiv.appendChild(cinemaContainer)
+
+    /*const cinemaSelect = document.createElement("select")
     cinemaSelect.id = "cinemaSelect"
-    cinemaSelect.classList.add("form-select")
+    cinemaSelect.classList.add("form-select")*/
 
 // ---- Fetch cinemas from backend ----
     const cinemaResponse = await fetch(`${window.config.API_BASE_URL}` + "/api/cinemas")
     const cinemaData = await cinemaResponse.json();
+
+    cinemaData.forEach(cin => {
+        const checkboxWrapper = document.createElement("div")
+        checkboxWrapper.classList.add("checkbox-wrapper")
+
+        const checkbox = document.createElement("input")
+        checkbox.type = "checkbox"
+        checkbox.id = `cinema-${cin.id}`
+        checkbox.value = cin.id
+        checkbox.name = "cinemas"
+
+        const label = document.createElement("label")
+        label.setAttribute("for", `cinema-${cin.id}`)
+        label.textContent = cin.name
+
+        checkboxWrapper.appendChild(checkbox)
+        checkboxWrapper.appendChild(label)
+        cinemaContainer.appendChild(checkboxWrapper)
+    })
+
+    /*
     if (!Array.isArray(cinemaData) || cinemaData.length === 0) {
     alert("Ingen biografer fundet");
   } else {
@@ -111,7 +137,7 @@ export async function displayManageEmployee() {
       cinemaSelect.appendChild(option);
     }
   }
-    createNewEmployeeFormDiv.appendChild(cinemaSelect)
+    createNewEmployeeFormDiv.appendChild(cinemaSelect)*/
     
 
 // ---- Submit Button ----
@@ -119,12 +145,18 @@ export async function displayManageEmployee() {
     submitBtn.textContent = "Tilføj Medarbejder"
     submitBtn.classList.add("btn", "btn-submit")
     submitBtn.addEventListener("click", async function () {
-        if (!usernameInput.value || !passwordInput.value || !authlevelSelect.value || !cinemaSelect.value) {
+        if (!usernameInput.value || !passwordInput.value || !authlevelSelect.value) {
             alert("Udfyld alle felter")
             return await displayManageEmployee()
         }
 
-        const cinemaIds = [parseInt(cinemaSelect.value)];
+        const selectedCheckboxes = document.querySelectorAll('#cinemaContainer input[name="cinemas"]:checked')
+        const cinemaIds = Array.from(selectedCheckboxes).map(cb => parseInt(cb.value))
+
+        if (cinemaIds.length === 0) {
+            alert("Vælg mindst én biograf")
+            return
+        }
 
         const response = await fetch(`${window.config.API_BASE_URL}`+ "/api/users",{
             method: "POST",
@@ -191,13 +223,22 @@ export async function displayManageEmployee() {
         authCell.textContent = emp.authlevel || "N/A";
         row.appendChild(authCell);
 
+        console.log(emp.cinemas);
         // Cinemas (may be an array)
         const cinemaCell = document.createElement("td");
         if (Array.isArray(emp.cinemas) && emp.cinemas.length > 0) {
             cinemaCell.textContent = emp.cinemas.map(cin => cin.name).join(", ");
+        } else if (Array.isArray(emp.cinemaIds) && emp.cinemaIds.length > 0) {
+            const names = emp.cinemaIds.map(id => {
+                const found = cinemaData.find(cin => cin.id === id);
+                return found ? found.name : `#${id}`;
+            });
+            cinemaCell.textContent = names.join(", ");
         } else {
             cinemaCell.textContent = "Ingen biograf";
+            //console.log(emp)
         }
+        
         row.appendChild(cinemaCell);
 
         // Actions cell
@@ -210,7 +251,7 @@ export async function displayManageEmployee() {
             const confirmed = confirm("Er du sikker på du vil slette denne medarbejder?");
             if (!confirmed) return;
 
-            const delResponse = await fetch(`${window.config.API_BASE_URL}` + "/api/users" + emp.id, {
+            const delResponse = await fetch(`${window.config.API_BASE_URL}` + "/api/users/" + emp.id, {
                 method: "DELETE"
             });
 
@@ -218,7 +259,7 @@ export async function displayManageEmployee() {
                 alert("Medarbejder slettet");
                 return await displayManageEmployee();
             } else {
-                alert("Noget gik galt med sletning");
+                alert(`Noget gik galt med sletning: ${responseData.message || 'Unknown error'}`);
                 return await displayManageEmployee(); 
             }
         });

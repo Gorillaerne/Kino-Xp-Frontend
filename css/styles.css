@@ -425,3 +425,16 @@ it looks even worse now /* General Panel Layout */ .employee-panel {
     display: block;
     margin: 10px auto 0 auto;
 }
+
+.cinema-container {
+    border: 1px solid #ccc;
+    padding: 5px;
+    max-height: 150px;
+    overflow-y: auto;
+}
+
+.checkbox-wrapper {
+    display: flex;
+    align-items: center;
+    margin-bottom: 3px;
+}

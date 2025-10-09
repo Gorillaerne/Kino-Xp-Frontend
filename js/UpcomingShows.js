@@ -1,10 +1,14 @@
-import { createHeader } from "./landingpage.js";
+import {createHeader, renderPage} from "./landingpage.js";
 import {displaySeatReservation} from "./SeatReservation.js";
 
 const app = document.getElementById("app");
 
 export async function displayUpcomingShows(movieId, cinemaId) {
     app.innerHTML = "";
+
+
+
+
 
     // Create a reusable container for show listings
     const upcomingShowsHolderDiv = document.createElement("div");
@@ -16,11 +20,27 @@ export async function displayUpcomingShows(movieId, cinemaId) {
     // Header
     app.appendChild(createHeader());
 
+
     const headingDiv = document.createElement("div");
     const heading = document.createElement("h1");
     headingDiv.classList.add("upcomingshows-headingdiv");
     heading.textContent = "Kommende forestillinger i " + cinemaData.name;
     headingDiv.appendChild(heading);
+
+    const backbutton = document.createElement("img")
+    backbutton.src = "pictures/backbutton.png"
+    backbutton.classList.add("back-button");
+    backbutton.addEventListener("click", async function(){
+        return await renderPage()
+    })
+   headingDiv.appendChild(backbutton)
+
+
+
+
+
+
+
     app.appendChild(headingDiv);
 
     // Filter section
@@ -155,7 +175,7 @@ async function renderMovieShows(cinemaId, movie, containerDiv) {
                         showBtn.appendChild(showHeading)
 
                         showBtn.addEventListener("click", async function() {
-                            return await displaySeatReservation(show.id);
+                                return await displaySeatReservation(show.id,cinemaId,movie.id);
                         });
 
                         showtimeCell.appendChild(showBtn);

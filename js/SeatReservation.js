@@ -362,14 +362,14 @@ const movieDescriptionDiv = document.createElement("div")
             if (!response.ok) {
                 const errorText = await response.text();
                 alert(errorText)
-                return await displaySeatReservation(showId)
+                return await displaySeatReservation(showId,cinemaId)
 
             }
             alert("Din booking er gennemført!");
             bookPopupOverlay.style.display = "none";
             selectedSeats = [];
             totalPrice = 0;
-            return await displaySeatReservation(showData.id);
+            return await displaySeatReservation(showData.id,cinemaId);
         } catch (error) {
             console.error("Fejl ved booking:", error);
             alert("Serverfejl under booking.");

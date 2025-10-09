@@ -4,6 +4,7 @@ import { displayMovieEmployeePanel } from  "./movieEmployeePanel.js";
 import { displayManageEmployee } from "./manageemployee.js";
 import {renderPage} from "./landingpage.js";
 import {displayManageCinema} from "./manageCinema.js";
+import {displayManageTheatre} from "./manageTheatre.js";
 
 
 const app = document.getElementById("app");
@@ -115,6 +116,24 @@ export async function displayEmployeePanel() {
 
     }
 
+
+    if(user.authlevel === "ADMIN"){
+        const manageTheatreComponent = document.createElement("div")
+        manageTheatreComponent.classList.add("card", "component");
+
+        const manageTheatreComponentHeader = document.createElement("h1");
+        manageTheatreComponentHeader.textContent = "Håndter Sale";
+        manageTheatreComponentHeader.classList.add("component-header");
+        manageTheatreComponent.appendChild(manageTheatreComponentHeader);
+
+        manageTheatreComponent.addEventListener("click", async function(){
+           return await displayManageTheatre();
+
+        });
+
+        employeePanelComponentDiv.appendChild(manageTheatreComponent);
+
+    }
 
     // Append components
     employeePanelDiv.appendChild(employeePanelComponentDiv);

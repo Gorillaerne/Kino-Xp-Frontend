@@ -1,4 +1,5 @@
-import {createHeader} from "./landingpage.js";
+import {createHeader, renderPage} from "./landingpage.js";
+import {displayUpcomingShows} from "./UpcomingShows.js";
 
 
 
@@ -6,12 +7,27 @@ const app = document.getElementById("app")
 let selectedSeats = [];
 let totalPrice = 0;
 
-export async function displaySeatReservation(showId){
+export async function displaySeatReservation(showId,cinemaId){
    selectedSeats = [];
     totalPrice = 0;
 app.innerHTML = "";
 const header = createHeader();
 app.appendChild(header)
+
+    const backbuttonDiv = document.createElement("div")
+    backbuttonDiv.classList.add("upcomingshows-headingdiv")
+
+    const backbutton = document.createElement("img")
+    backbutton.src = "pictures/backbutton.png"
+    backbutton.classList.add("back-button");
+    backbutton.addEventListener("click", async function(){
+            return await displayUpcomingShows(null,cinemaId)
+    })
+
+    backbuttonDiv.appendChild(backbutton)
+    app.appendChild(backbuttonDiv)
+
+
 
     const displaySeatReservationDiv = document.createElement("div")
     displaySeatReservationDiv.classList.add("book-seat-page-container")
@@ -346,14 +362,14 @@ const movieDescriptionDiv = document.createElement("div")
             if (!response.ok) {
                 const errorText = await response.text();
                 alert(errorText)
-                return await displaySeatReservation(showId)
+                return await displaySeatReservation(showId,cinemaId)
 
             }
             alert("Din booking er gennemført!");
             bookPopupOverlay.style.display = "none";
             selectedSeats = [];
             totalPrice = 0;
-            return await displaySeatReservation(showData.id);
+            return await displaySeatReservation(showData.id,cinemaId);
         } catch (error) {
             console.error("Fejl ved booking:", error);
             alert("Serverfejl under booking.");

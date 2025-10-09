@@ -162,7 +162,7 @@ export async function displayManageEmployee() {
     employeeTable.classList.add("employee-table");
 
     const headerRow = document.createElement("tr");
-    ["Username", "Password", "Autentificering", "Biograf", "Handling"].forEach(text => {
+    ["Username", "Autentificering", "Biograf", "Handling"].forEach(text => {
         const th = document.createElement("th");
         th.textContent = text;
         headerRow.appendChild(th);
@@ -185,10 +185,6 @@ export async function displayManageEmployee() {
         usernameCell.textContent = emp.username || "N/A";
         row.appendChild(usernameCell);
 
-        // Password
-        const passwordCell = document.createElement("td");
-        passwordCell.textContent = emp.password || "N/A";
-        row.appendChild(passwordCell);
 
         // Authlevel
         const authCell = document.createElement("td");
@@ -207,7 +203,7 @@ export async function displayManageEmployee() {
         // Actions cell
         const actionsCell = document.createElement("td");
         const removeBtn = document.createElement("button");
-        removeBtn.textContent = "Fjern";
+        removeBtn.textContent = "Fjern medarbejder ";
         removeBtn.classList.add("btn", "btn-delete");
 
         removeBtn.addEventListener("click", async () => {

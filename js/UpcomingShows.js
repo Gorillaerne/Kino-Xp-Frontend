@@ -175,7 +175,7 @@ async function renderMovieShows(cinemaId, movie, containerDiv) {
                         showBtn.appendChild(showHeading)
 
                         showBtn.addEventListener("click", async function() {
-                                return await displaySeatReservation(show.id,cinemaId,movie.id);
+                                return await displaySeatReservation(show.id,cinemaId);
                         });
 
                         showtimeCell.appendChild(showBtn);

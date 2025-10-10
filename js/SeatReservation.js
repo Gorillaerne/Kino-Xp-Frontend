@@ -1,6 +1,8 @@
 import {createHeader, renderPage} from "./landingpage.js";
 import {displayUpcomingShows} from "./UpcomingShows.js";
 
+
+
 const app = document.getElementById("app")
 let selectedSeats = [];
 let totalPrice = 0;

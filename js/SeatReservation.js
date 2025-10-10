@@ -1,6 +1,8 @@
 import {createHeader, renderPage} from "./landingpage.js";
 import {displayUpcomingShows} from "./UpcomingShows.js";
 
+
+
 const app = document.getElementById("app")
 let selectedSeats = [];
 let totalPrice = 0;
@@ -350,6 +352,16 @@ const movieDescriptionDiv = document.createElement("div")
             showId: showData.id,
             seatIds: selectedSeats.map(seat => seat.id)
         }
+
+        //Loader
+        const loader = document.createElement("span");
+        loader.classList.add("loader");
+        formBntConfirm.appendChild(loader);
+        loader.style.display = "inline-block";
+
+        formBntConfirm.disabled = true; //double-klik slået fra
+        formBntConfirm.textContent = "Sender…";
+
         try {
             const response = await fetch(`${window.config.API_BASE_URL}`+ "/api/reservations", {
                 method: "POST",
@@ -371,6 +383,10 @@ const movieDescriptionDiv = document.createElement("div")
         } catch (error) {
             console.error("Fejl ved booking:", error);
             alert("Serverfejl under booking.");
+        } finally {
+            loader.remove();
+            formBntConfirm.disabled = false;
+            formBntConfirm.textContent = "Bekræft";
         }
     })
 

@@ -104,7 +104,10 @@ it looks even worse now /* General Panel Layout */ .employee-panel {
     cursor: pointer;
     transition: transform 0.2s ease, opacity 0.2s ease;
     z-index: 1000; /* keeps it on top of other elements */
+
 }
+
+
 
 .header-container {
     width: 100%;
@@ -437,4 +440,26 @@ it looks even worse now /* General Panel Layout */ .employee-panel {
     display: flex;
     align-items: center;
     margin-bottom: 3px;
+}
+
+
+/*Loader*/
+.loader {
+  width: 20px;
+  height: 20px;
+  border: 3px solid rgba(255, 255, 255, 0.3);
+  border-top-color: white;
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+  margin-left: 8px;
+  display: none;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+.form-confirm-bnt[disabled] {
+  opacity: 0.7;
+  cursor: not-allowed;
 }

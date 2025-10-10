@@ -104,7 +104,10 @@ it looks even worse now /* General Panel Layout */ .employee-panel {
     cursor: pointer;
     transition: transform 0.2s ease, opacity 0.2s ease;
     z-index: 1000; /* keeps it on top of other elements */
+
 }
+
+
 
 .header-container {
     width: 100%;

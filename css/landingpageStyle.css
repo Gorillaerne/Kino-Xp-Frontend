@@ -241,6 +241,7 @@ width: 15em;
     right: 2em; /* lock to the right side */
     height: 4em;
     width: 4em;
+    filter: brightness(0) invert(1);
 }
 .upcomingshows-headingdiv img:hover {
     cursor: pointer;

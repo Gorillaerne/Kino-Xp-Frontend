@@ -96,8 +96,12 @@ export async function displayManageEmployee() {
 
     const cinemaContainer = document.createElement("div")
     cinemaContainer.id = "cinemaContainer"
-    cinemaContainer.classList.add("cinema-container")
+    cinemaContainer.classList.add("cinema-container") // add CSS for styling
     createNewEmployeeFormDiv.appendChild(cinemaContainer)
+
+    /*const cinemaSelect = document.createElement("select")
+    cinemaSelect.id = "cinemaSelect"
+    cinemaSelect.classList.add("form-select")*/
 
 // ---- Fetch cinemas from backend ----
     const cinemaResponse = await fetch(`${window.config.API_BASE_URL}` + "/api/cinemas")
@@ -121,6 +125,20 @@ export async function displayManageEmployee() {
         checkboxWrapper.appendChild(label)
         cinemaContainer.appendChild(checkboxWrapper)
     })
+
+    /*
+    if (!Array.isArray(cinemaData) || cinemaData.length === 0) {
+    alert("Ingen biografer fundet");
+  } else {
+    for (const cin of cinemaData) {
+      const option = document.createElement("option");
+      option.textContent = cin.name;
+      option.value = cin.id;
+      cinemaSelect.appendChild(option);
+    }
+  }
+    createNewEmployeeFormDiv.appendChild(cinemaSelect)*/
+    
 
 // ---- Submit Button ----
     const submitBtn = document.createElement("button")
@@ -218,6 +236,7 @@ export async function displayManageEmployee() {
             cinemaCell.textContent = names.join(", ");
         } else {
             cinemaCell.textContent = "Ingen biograf";
+            //console.log(emp)
         }
         
         row.appendChild(cinemaCell);
@@ -249,6 +268,8 @@ export async function displayManageEmployee() {
 
         employeeTable.appendChild(row);
     }
+
+
 
     employeeDisplayDiv.appendChild(employeeTable);
     componentPanel.appendChild(employeeDisplayDiv);
